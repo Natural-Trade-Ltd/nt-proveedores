@@ -165,7 +165,7 @@ function m3f(n){if(n==null)return"";return Number(n).toLocaleString("en-US",{min
 function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("on");setTimeout(function(){t.classList.remove("on")},1800);}
 function callApi(action,payload){
   var body={pass:PASS,action:action};if(payload)for(var k in payload)body[k]=payload[k];
-  var ctl=new AbortController();var to=setTimeout(function(){ctl.abort();},25000);
+  var ctl=new AbortController();var to=setTimeout(function(){ctl.abort();},12000);
   return fetch(API,{method:"POST",signal:ctl.signal,headers:{apikey:KEY,Authorization:"Bearer "+KEY,"Content-Type":"application/json"},body:JSON.stringify(body)})
     .then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(r.status===401){var e=new Error("401");e.code=401;throw e;}if(!r.ok||j.ok===false){throw new Error(j.error||j.message||"Error");}return j;});})
     .catch(function(e){if(e&&e.name==="AbortError"){throw new Error("la conexión tardó demasiado (arranque en frío)");}throw e;})
@@ -294,14 +294,17 @@ document.getElementById("np-go").addEventListener("click",function(){
 function enter(){
   PASS=document.getElementById("gp").value;
   var msg=document.getElementById("gmsg"), btn=document.getElementById("gbtn");
-  btn.disabled=true;msg.style.color="var(--mut)";msg.textContent="Entrando… (la primera vez puede tardar unos segundos)";
-  function ok(){try{sessionStorage.setItem("pvpass",PASS);}catch(e){}document.getElementById("gate").classList.add("hide");document.getElementById("app").classList.remove("hide");btn.disabled=false;}
-  function fail(e){btn.disabled=false;msg.style.color="#8a2020";if(e&&e.code===401){PASS=null;msg.textContent="Clave incorrecta.";}else{msg.textContent="No se pudo conectar ("+((e&&e.message)||e)+"). Toca Entrar para reintentar.";}}
-  load().then(ok).catch(function(e){
-    if(e&&e.code===401){fail(e);return;}
-    msg.textContent="Reintentando…";
-    load().then(ok).catch(fail);
-  });
+  btn.disabled=true;msg.style.color="var(--mut)";
+  function ok(){try{sessionStorage.setItem("pvpass",PASS);}catch(e){}msg.textContent="";document.getElementById("gate").classList.add("hide");document.getElementById("app").classList.remove("hide");btn.disabled=false;}
+  function attempt(n){
+    msg.style.color="var(--mut)";msg.textContent="Entrando… (intento "+n+" de 3)";
+    load().then(ok).catch(function(e){
+      if(e&&e.code===401){btn.disabled=false;msg.style.color="#8a2020";PASS=null;msg.textContent="Clave incorrecta.";return;}
+      if(n<3){attempt(n+1);}
+      else{btn.disabled=false;msg.style.color="#8a2020";msg.textContent="No se pudo conectar ("+((e&&e.message)||e)+"). Prueba en ventana Incógnito o revisa extensiones/bloqueadores; luego toca Entrar.";}
+    });
+  }
+  attempt(1);
 }
 document.getElementById("gbtn").addEventListener("click",enter);
 document.getElementById("gp").addEventListener("keydown",function(e){if(e.key==="Enter")enter();});
