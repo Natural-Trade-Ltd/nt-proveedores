@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proveedores Brasil — Pino · NetSuite</title>
+<style>
+  :root{--bg:#f3f5f2;--surf:#fff;--surf2:#eef1ec;--ink:#17201b;--mut:#5d6b62;--faint:#8a9790;--bd:#e0e5de;--acc:#2e6b4c;--acc2:#3e8c64;--bill:#e4ecf2;--billf:#2c5a7a;--pend:#f6e6cf;--pendf:#8a5e15;--lam:#e6f1ea;--lamf:#245a3f}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px}
+  .num{font-variant-numeric:tabular-nums;font-family:ui-monospace,"Cascadia Code","SF Mono",Consolas,monospace}
+  header{background:var(--surf);border-bottom:1px solid var(--bd);padding:16px 20px}
+  h1{margin:0;font-size:19px;font-weight:680;letter-spacing:-.01em}
+  .sub{color:var(--mut);font-size:12.5px;margin-top:3px}
+  .wrap{padding:16px 20px 80px}
+  .tabs{display:flex;gap:6px;margin:0 20px;border-bottom:1px solid var(--bd)}
+  .tab{padding:9px 15px;cursor:pointer;border:1px solid transparent;border-bottom:none;border-radius:9px 9px 0 0;font-weight:600;color:var(--mut)}
+  .tab.on{background:var(--surf);color:var(--acc);border-color:var(--bd)}
+  .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+  input,select,textarea{font:inherit;color:var(--ink);background:var(--surf);border:1px solid var(--bd);border-radius:8px;padding:7px 9px}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--acc);border-color:var(--acc)}
+  .bar input[type=search]{min-width:210px}
+  button{font:inherit;font-weight:600;cursor:pointer;border:none;border-radius:8px;padding:8px 13px;background:var(--acc);color:#fff}
+  button:hover{background:var(--acc2)}
+  button.ghost{background:transparent;color:var(--mut);border:1px solid var(--bd)}
+  button.ghost:hover{color:var(--ink);border-color:var(--acc)}
+  .totbar{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;background:var(--surf);border:1px solid var(--bd);border-radius:10px;padding:10px 15px;margin-bottom:12px}
+  .totbar b{font-size:17px}
+  .totbar .lab{color:var(--mut);font-size:12.5px}
+  .scroll{overflow-x:auto;background:var(--surf);border:1px solid var(--bd);border-radius:10px}
+  table{border-collapse:collapse;width:100%;font-size:13px}
+  th{position:sticky;top:0;background:var(--surf2);text-align:left;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);font-weight:600;padding:9px 10px;white-space:nowrap;border-bottom:1px solid var(--bd);cursor:pointer;z-index:2}
+  td{padding:7px 10px;border-bottom:1px solid var(--bd);vertical-align:middle;white-space:nowrap}
+  tr:hover td{background:var(--surf2)}
+  td.r,th.r{text-align:right}
+  .chip{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.03em;padding:2px 7px;border-radius:999px;font-family:ui-monospace,monospace}
+  .c-bill{background:var(--bill);color:var(--billf)}.c-pend{background:var(--pend);color:var(--pendf)}
+  .c-lam{background:var(--lam);color:var(--lamf)}.c-img{background:var(--surf2);color:var(--mut)}
+  .c-out{background:#f6dede;color:#8a2020}
+  a.po{color:var(--acc);font-weight:700;text-decoration:none;font-family:ui-monospace,monospace}
+  a.po:hover{text-decoration:underline}
+  .cmt{width:150px;border:1px solid transparent;background:transparent;border-radius:6px;padding:4px 6px;font-size:12px}
+  .cmt:hover{border-color:var(--bd)}
+  .cmt.saved{background:#e6f1ea}
+  .prov{font-weight:600}
+  .muted{color:var(--faint)}
+  .card{background:var(--surf);border:1px solid var(--bd);border-radius:10px;padding:16px;margin-bottom:14px}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+  .fld{display:flex;flex-direction:column;gap:3px}
+  .fld label{font-size:11px;color:var(--mut);font-weight:600}
+  .att{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--bd)}
+  .att .k{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:999px;background:var(--surf2);color:var(--mut)}
+  dialog{border:1px solid var(--bd);border-radius:12px;padding:0;max-width:460px;width:92%}
+  dialog::backdrop{background:rgba(20,30,25,.4)}
+  .dlg-h{padding:14px 18px;border-bottom:1px solid var(--bd);font-weight:680}
+  .dlg-b{padding:18px}
+  .hide{display:none}
+  .note{font-size:12px;color:var(--mut);margin-top:6px}
+  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:9px;font-size:13px;opacity:0;transition:opacity .2s;z-index:50}
+  .toast.on{opacity:1}
+  #gate{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:100}
+  .gbox{background:var(--surf);border:1px solid var(--bd);border-radius:14px;padding:28px;width:360px;max-width:92%;box-shadow:0 10px 40px rgba(20,40,30,.12)}
+  .gbox h2{margin:0 0 4px;font-size:18px}
+  .gbox p{color:var(--mut);font-size:13px;margin:0 0 16px}
+  .gbox input{width:100%;margin-bottom:10px}
+  .gbox button{width:100%}
+  #gmsg{font-size:12.5px;color:#8a2020;margin-top:8px;min-height:16px}
+</style></head>
+<body>
+
+<div id="gate">
+  <div class="gbox">
+    <h2>Proveedores Brasil — Pino</h2>
+    <p>Herramienta interna NT/GF. Ingresa la clave compartida para ver las compras.</p>
+    <input type="password" id="gp" placeholder="Clave" autocomplete="off">
+    <button id="gbtn">Entrar</button>
+    <div id="gmsg"></div>
+  </div>
+</div>
+
+<div id="app" class="hide">
+<header>
+  <h1>Proveedores Brasil — Pino · Compras NetSuite</h1>
+  <div class="sub" id="sub">Cargando…</div>
+</header>
+<div class="tabs">
+  <div class="tab on" id="tab-pos">Compras (POs)</div>
+  <div class="tab" id="tab-att">Adjuntos y correos</div>
+</div>
+<div class="wrap">
+  <div id="view-pos">
+    <div class="bar">
+      <input type="search" id="q" placeholder="Buscar PO, proveedor o comprador…">
+      <select id="f-prov"></select>
+      <select id="f-status"><option value="">Estatus: todos</option><option value="billed">Facturada</option><option value="pending">Pendiente recep.</option></select>
+      <select id="f-lam"><option value="">Lamarque: todos</option><option value="si">Rep. Lamarque</option><option value="no">No Lamarque</option></select>
+      <select id="f-img"><option value="">Lista Carlos: todos</option><option value="si">En imagen</option><option value="no">Fuera de imagen</option></select>
+      <select id="f-year"></select>
+      <select id="f-buyer"></select>
+      <button class="ghost" id="clear">Limpiar</button>
+      <span style="flex:1"></span>
+      <button id="add">+ Agregar proveedor</button>
+    </div>
+    <div class="totbar" id="totbar"></div>
+    <div class="scroll"><table id="tbl"><thead><tr>
+      <th data-k="po_number">PO #</th>
+      <th data-k="prov">Proveedor</th>
+      <th data-k="status">Estatus</th>
+      <th data-k="po_date">Fecha PO</th>
+      <th data-k="created_date">Creada</th>
+      <th data-k="eta">ETA</th>
+      <th data-k="receipt_date">Recepción</th>
+      <th class="r" data-k="amount_usd">Monto USD</th>
+      <th class="r" data-k="volume_m3">M³</th>
+      <th class="r" data-k="usd_per_m3">US$/M³</th>
+      <th data-k="buyer">Comprador</th>
+      <th data-k="ship_type">Envío</th>
+      <th>Comentario</th>
+    </tr></thead><tbody id="rows"></tbody></table></div>
+  </div>
+
+  <div id="view-att" class="hide">
+    <div class="card">
+      <div style="font-weight:680;margin-bottom:10px">Guardar correo, archivo o nota</div>
+      <div class="row">
+        <div class="fld"><label>Tipo</label><select id="a-kind"><option value="email">Correo</option><option value="file">Archivo</option><option value="note">Nota</option></select></div>
+        <div class="fld"><label>Proveedor (opcional)</label><select id="a-prov"></select></div>
+        <div class="fld" style="flex:1;min-width:200px"><label>Título / asunto</label><input id="a-title" placeholder="Ej. Confirmación embarque Selva Norte"></div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <div class="fld" id="a-file-wrap" style="flex:1"><label>Archivo (PDF, imagen, etc.)</label><input type="file" id="a-file"></div>
+        <div class="fld hide" id="a-text-wrap" style="flex:1;width:100%"><label>Texto del correo / nota</label><textarea id="a-body" rows="4" style="width:100%" placeholder="Pega aquí el correo o la nota…"></textarea></div>
+        <div class="fld"><label>Autor (opcional)</label><input id="a-author" placeholder="Tu nombre"></div>
+        <button id="a-save">Guardar</button>
+      </div>
+      <div class="note">Todo se guarda en Supabase (Docusafe). Los archivos quedan privados y se abren con enlace firmado temporal.</div>
+    </div>
+    <div class="card"><div style="font-weight:680;margin-bottom:6px">Guardados</div><div id="att-list"></div></div>
+  </div>
+</div>
+</div>
+
+<dialog id="dlg">
+  <div class="dlg-h">Agregar proveedor</div>
+  <div class="dlg-b">
+    <div class="fld"><label>Nombre del proveedor en NetSuite (o parte)</label><input id="np-name" placeholder="Ej. Madeireira Fulano"></div>
+    <div class="note">Jalará sus Purchase Orders (facturadas + pendientes) de NetSuite y las agregará. Si aún no están las credenciales de integración, queda registrado como solicitud y lo cargamos en breve.</div>
+    <div id="np-msg" class="note"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+      <button class="ghost" id="np-cancel">Cancelar</button>
+      <button id="np-go">Jalar de NetSuite</button>
+    </div>
+  </div>
+</dialog>
+<div class="toast" id="toast"></div>
+
+<script>
+var SB="https://pddqdfgwnhkojlnjcwzj.supabase.co";
+var KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkZHFkZmd3bmhrb2psbmpjd3pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1MTU3MzMsImV4cCI6MjA5MzA5MTczM30.fFO2AC7Al0MJkj3nbRl4md6gaO4FEkbll1QA2DBowEY";
+var API=SB+"/functions/v1/pv-api";
+var NSURL="https://4830110.app.netsuite.com/app/accounting/transactions/purchord.nl?id=";
+var PASS=null, POS=[], SUPS=[], sortK="po_date", sortDir=-1;
+
+function esc(s){s=(s==null?"":""+s);return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function money(n){if(n==null)return"";return "US$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
+function m3f(n){if(n==null)return"";return Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("on");setTimeout(function(){t.classList.remove("on")},1800);}
+function callApi(action,payload){
+  var body={pass:PASS,action:action};if(payload)for(var k in payload)body[k]=payload[k];
+  return fetch(API,{method:"POST",headers:{apikey:KEY,Authorization:"Bearer "+KEY,"Content-Type":"application/json"},body:JSON.stringify(body)})
+    .then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(r.status===401){var e=new Error("401");e.code=401;throw e;}if(!r.ok||j.ok===false){throw new Error(j.error||j.message||"Error");}return j;});});
+}
+
+function load(){
+  return callApi("load").then(function(d){
+    POS=(d.pos||[]).map(function(p){p.prov=p.pv_suppliers?p.pv_suppliers.canonical_name:"?";p.lam=p.pv_suppliers&&p.pv_suppliers.rep_lamarque;p.img=p.pv_suppliers&&p.pv_suppliers.en_imagen;p.year=p.po_date?(""+p.po_date).slice(0,4):"";return p;});
+    SUPS=d.suppliers||[];
+    buildFilters();renderAll();fillSub();
+  });
+}
+function fillSub(){
+  var b=POS.filter(function(p){return p.status==="billed"}).length, pe=POS.length-b;
+  document.getElementById("sub").innerHTML="NetSuite · "+SUPS.length+" proveedores · "+POS.length+" POs (Facturadas "+b+" + Pendientes "+pe+") · datos en Docusafe";
+}
+function buildFilters(){
+  var provSel=document.getElementById("f-prov"), aprov=document.getElementById("a-prov"), ySel=document.getElementById("f-year"), bSel=document.getElementById("f-buyer");
+  var names=SUPS.map(function(s){return s.canonical_name}).sort();
+  provSel.innerHTML='<option value="">Proveedor: todos</option>'+names.map(function(n){return '<option>'+esc(n)+'</option>'}).join("");
+  aprov.innerHTML='<option value="">(sin proveedor)</option>'+SUPS.map(function(s){return '<option value="'+s.id+'">'+esc(s.canonical_name)+'</option>'}).join("");
+  var years=[];POS.forEach(function(p){if(p.year&&years.indexOf(p.year)<0)years.push(p.year)});years.sort();
+  ySel.innerHTML='<option value="">Año: todos</option>'+years.map(function(y){return '<option>'+y+'</option>'}).join("");
+  var buyers=[];POS.forEach(function(p){if(p.buyer&&buyers.indexOf(p.buyer)<0)buyers.push(p.buyer)});buyers.sort();
+  bSel.innerHTML='<option value="">Comprador: todos</option>'+buyers.map(function(b){return '<option>'+esc(b)+'</option>'}).join("");
+}
+function filtered(){
+  var q=document.getElementById("q").value.toLowerCase().trim();
+  var fp=document.getElementById("f-prov").value, fs=document.getElementById("f-status").value, fl=document.getElementById("f-lam").value, fi=document.getElementById("f-img").value, fy=document.getElementById("f-year").value, fb=document.getElementById("f-buyer").value;
+  return POS.filter(function(p){
+    if(fp&&p.prov!==fp)return false;
+    if(fs&&p.status!==fs)return false;
+    if(fl==="si"&&!p.lam)return false; if(fl==="no"&&p.lam)return false;
+    if(fi==="si"&&!p.img)return false; if(fi==="no"&&p.img)return false;
+    if(fy&&p.year!==fy)return false;
+    if(fb&&p.buyer!==fb)return false;
+    if(q){var hay=(p.po_number||"")+" "+p.prov+" "+(p.buyer||"");if(hay.toLowerCase().indexOf(q)<0)return false;}
+    return true;
+  });
+}
+function renderAll(){
+  var rows=filtered();
+  rows.sort(function(a,b){var va=a[sortK],vb=b[sortK];if(sortK==="amount_usd"||sortK==="volume_m3"||sortK==="usd_per_m3"){va=Number(va)||0;vb=Number(vb)||0;return (va-vb)*sortDir;}va=(""+(va==null?"":va)).toLowerCase();vb=(""+(vb==null?"":vb)).toLowerCase();return va<vb?-sortDir:va>vb?sortDir:0;});
+  var tot=0,tm=0;rows.forEach(function(p){tot+=Number(p.amount_usd||0);tm+=Number(p.volume_m3||0)});
+  document.getElementById("totbar").innerHTML='<span class="lab">Mostrando</span> <b class="num">'+rows.length+'</b> <span class="lab">POs &nbsp;·&nbsp; Monto</span> <b class="num">'+money(tot)+'</b> <span class="lab">&nbsp;·&nbsp; Volumen</span> <b class="num">'+m3f(tm)+' M³</b>';
+  var html=rows.map(function(p){
+    var st=p.status==="billed"?'<span class="chip c-bill">Facturada</span>':'<span class="chip c-pend">Pendiente</span>';
+    var tags=(p.lam?'<span class="chip c-lam">Lamarque</span> ':'')+(p.img?'<span class="chip c-img">Carlos</span>':'<span class="chip c-out">fuera imagen</span>');
+    var link=p.ns_internal_id?'<a class="po" href="'+NSURL+p.ns_internal_id+'&whence=" target="_blank" rel="noopener">'+esc(p.po_number||p.ns_internal_id)+'</a>':esc(p.po_number||"");
+    return '<tr>'+
+      '<td>'+link+'</td>'+
+      '<td class="prov">'+esc(p.prov)+'<br>'+tags+'</td>'+
+      '<td>'+st+'</td>'+
+      '<td class="num">'+esc(p.po_date||"")+'</td>'+
+      '<td class="num">'+esc(p.created_date||"")+'</td>'+
+      '<td class="num">'+esc(p.eta||"")+'</td>'+
+      '<td class="num">'+esc(p.receipt_date||"")+'</td>'+
+      '<td class="r num">'+money(p.amount_usd)+'</td>'+
+      '<td class="r num">'+m3f(p.volume_m3)+'</td>'+
+      '<td class="r num">'+(p.usd_per_m3?money(p.usd_per_m3):"")+'</td>'+
+      '<td>'+esc(p.buyer||"")+'</td>'+
+      '<td>'+esc(p.ship_type||"")+'</td>'+
+      '<td><input class="cmt" data-id="'+p.id+'" value="'+esc(p.comment||"")+'" placeholder="…"></td>'+
+    '</tr>';
+  }).join("");
+  document.getElementById("rows").innerHTML=html;
+  Array.prototype.forEach.call(document.querySelectorAll(".cmt"),function(inp){
+    inp.addEventListener("change",function(){
+      var id=inp.getAttribute("data-id"), val=inp.value;
+      callApi("set_comment",{id:Number(id),comment:val}).then(function(){inp.classList.add("saved");toast("Comentario guardado");setTimeout(function(){inp.classList.remove("saved")},1200);var pp=POS.filter(function(x){return x.id==id})[0];if(pp)pp.comment=val;}).catch(function(){toast("Error al guardar")});
+    });
+  });
+}
+Array.prototype.forEach.call(document.querySelectorAll("#tbl th[data-k]"),function(th){th.addEventListener("click",function(){var k=th.getAttribute("data-k");if(sortK===k)sortDir*=-1;else{sortK=k;sortDir=(k==="amount_usd"||k==="volume_m3"||k==="usd_per_m3"||k==="po_date"||k==="receipt_date")?-1:1;}renderAll();});});
+["q","f-prov","f-status","f-lam","f-img","f-year","f-buyer"].forEach(function(id){var el=document.getElementById(id);el.addEventListener(el.tagName==="INPUT"?"input":"change",renderAll);});
+document.getElementById("clear").addEventListener("click",function(){["q","f-prov","f-status","f-lam","f-img","f-year","f-buyer"].forEach(function(id){document.getElementById(id).value=""});renderAll();});
+
+function showTab(t){document.getElementById("tab-pos").classList.toggle("on",t==="pos");document.getElementById("tab-att").classList.toggle("on",t==="att");document.getElementById("view-pos").classList.toggle("hide",t!=="pos");document.getElementById("view-att").classList.toggle("hide",t!=="att");if(t==="att")loadAtt();}
+document.getElementById("tab-pos").addEventListener("click",function(){showTab("pos")});
+document.getElementById("tab-att").addEventListener("click",function(){showTab("att")});
+
+document.getElementById("a-kind").addEventListener("change",function(){var k=this.value;document.getElementById("a-file-wrap").classList.toggle("hide",k!=="file");document.getElementById("a-text-wrap").classList.toggle("hide",k==="file");});
+function loadAtt(){
+  callApi("att_list").then(function(d){
+    var list=d.items||[];
+    var html=list.map(function(a){
+      var link=a.file_url?'<a href="'+esc(a.file_url)+'" target="_blank" rel="noopener">'+esc(a.file_name||"archivo")+'</a>':"";
+      var body=a.email_body?'<div class="muted" style="white-space:normal;max-width:640px">'+esc((""+a.email_body).slice(0,400))+'</div>':"";
+      var prov=a.pv_suppliers?esc(a.pv_suppliers.canonical_name):"";
+      var kn=a.kind==="file"?"Archivo":(a.kind==="email"?"Correo":"Nota");
+      return '<div class="att"><span class="k">'+kn+'</span><div style="flex:1"><b>'+esc(a.title||"(sin título)")+'</b> '+(prov?'<span class="chip c-img">'+prov+'</span>':'')+' '+link+body+'<div class="muted" style="font-size:11px">'+esc((""+(a.created_at||"")).slice(0,16).replace("T"," "))+(a.author?' · '+esc(a.author):'')+'</div></div></div>';
+    }).join("");
+    document.getElementById("att-list").innerHTML=html||'<div class="muted">Aún no hay adjuntos.</div>';
+  }).catch(function(e){document.getElementById("att-list").innerHTML='<div class="muted">Error: '+esc(e.message)+'</div>';});
+}
+document.getElementById("a-save").addEventListener("click",function(){
+  var kind=document.getElementById("a-kind").value, title=document.getElementById("a-title").value, sup=document.getElementById("a-prov").value||null, author=document.getElementById("a-author").value||null, body=document.getElementById("a-body").value||null;
+  var base={kind:kind,title:title,supplier_id:sup?Number(sup):null,author:author};
+  if(kind==="file"){
+    var f=document.getElementById("a-file").files[0];
+    if(!f){toast("Elige un archivo");return;}
+    callApi("file_slot",{filename:f.name}).then(function(d){
+      return fetch(d.signedUrl,{method:"PUT",headers:{"Content-Type":f.type||"application/octet-stream"},body:f}).then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error("subida: "+t)});
+        base.storage_path=d.path;base.file_name=f.name;return callApi("att_add",base);});
+    }).then(function(){toast("Archivo guardado");document.getElementById("a-title").value="";document.getElementById("a-file").value="";loadAtt();}).catch(function(e){toast("Error: "+e.message)});
+  }else{
+    if(!body){toast("Escribe el texto");return;}
+    base.email_body=body;callApi("att_add",base).then(function(){toast("Guardado");document.getElementById("a-title").value="";document.getElementById("a-body").value="";loadAtt();}).catch(function(e){toast("Error: "+e.message)});
+  }
+});
+
+var dlg=document.getElementById("dlg");
+document.getElementById("add").addEventListener("click",function(){document.getElementById("np-msg").textContent="";document.getElementById("np-name").value="";dlg.showModal();});
+document.getElementById("np-cancel").addEventListener("click",function(){dlg.close()});
+document.getElementById("np-go").addEventListener("click",function(){
+  var name=document.getElementById("np-name").value.trim();if(!name){return;}
+  var msg=document.getElementById("np-msg");msg.textContent="Buscando en NetSuite…";
+  callApi("add_supplier",{name:name}).then(function(d){
+    if(d&&d.ok){msg.textContent="Listo: "+(d.message||"proveedor agregado");toast("Proveedor agregado");setTimeout(function(){dlg.close();load();},1000);}
+    else{msg.textContent=(d&&d.message)?d.message:"Registrado como solicitud.";}
+  }).catch(function(e){msg.textContent="Error: "+e.message;});
+});
+
+// ---- Gate ----
+function enter(){
+  PASS=document.getElementById("gp").value;
+  var msg=document.getElementById("gmsg");msg.textContent="Entrando…";
+  load().then(function(){
+    try{sessionStorage.setItem("pvpass",PASS);}catch(e){}
+    document.getElementById("gate").classList.add("hide");
+    document.getElementById("app").classList.remove("hide");
+  }).catch(function(e){
+    PASS=null;
+    if(e&&e.code===401){msg.textContent="Clave incorrecta.";}
+    else{msg.textContent="Error: "+(e.message||e);}
+  });
+}
+document.getElementById("gbtn").addEventListener("click",enter);
+document.getElementById("gp").addEventListener("keydown",function(e){if(e.key==="Enter")enter();});
+(function(){try{var s=sessionStorage.getItem("pvpass");if(s){document.getElementById("gp").value=s;enter();}}catch(e){}})();
+</script>
+</body></html>
