@@ -166,7 +166,7 @@ function toast(m){var t=document.getElementById("toast");t.textContent=m;t.class
 function callApi(action,payload){
   var body={pass:PASS,action:action};if(payload)for(var k in payload)body[k]=payload[k];
   var ctl=new AbortController();var to=setTimeout(function(){ctl.abort();},12000);
-  return fetch(API,{method:"POST",signal:ctl.signal,headers:{apikey:KEY,Authorization:"Bearer "+KEY,"Content-Type":"application/json"},body:JSON.stringify(body)})
+  return fetch(API,{method:"POST",signal:ctl.signal,headers:{"Content-Type":"text/plain;charset=UTF-8"},body:JSON.stringify(body)})
     .then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(r.status===401){var e=new Error("401");e.code=401;throw e;}if(!r.ok||j.ok===false){throw new Error(j.error||j.message||"Error");}return j;});})
     .catch(function(e){if(e&&e.name==="AbortError"){throw new Error("la conexión tardó demasiado (arranque en frío)");}throw e;})
     .finally(function(){clearTimeout(to);});
