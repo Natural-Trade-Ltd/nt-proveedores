@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<script>if(location.search.indexOf("v=")<0){location.replace(location.pathname+"?v="+Date.now());}</script>
+<title>Piniera × Natural Trade 2026</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#F3F5F1;--surf:#FFFFFF;--surf2:#E9EEE9;--ink:#1B2A22;--mut:#5F6E65;--faint:#93A099;--bd:#D9E0DA;--acc:#2E6B4C;--acc-ink:#FFFFFF;--ok:#2F7D4F;--ok-bg:#DFEFE4;--warn:#8A5E15;--warn-bg:#F7E8CF;--crit:#A63D2F;--crit-bg:#F6DEDA;--info:#2C5A7A;--info-bg:#DEE9F1;--grey:#5F6E65;--grey-bg:#E6E8E6;--link:#1F5A8A}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#121815;--surf:#1B221E;--surf2:#232C27;--ink:#E6ECE7;--mut:#9AA79F;--faint:#6F7C74;--bd:#2C3630;--acc:#5FA37F;--acc-ink:#0F1A14;--ok:#7FC79A;--ok-bg:#1F3A2A;--warn:#E0B060;--warn-bg:#3A2F17;--crit:#E68C7E;--crit-bg:#3F2320;--info:#8FB8D6;--info-bg:#1E2F3B;--grey:#9AA79F;--grey-bg:#262D29;--link:#8FB8D6}}
+:root[data-theme="dark"]{--bg:#121815;--surf:#1B221E;--surf2:#232C27;--ink:#E6ECE7;--mut:#9AA79F;--faint:#6F7C74;--bd:#2C3630;--acc:#5FA37F;--acc-ink:#0F1A14;--ok:#7FC79A;--ok-bg:#1F3A2A;--warn:#E0B060;--warn-bg:#3A2F17;--crit:#E68C7E;--crit-bg:#3F2320;--info:#8FB8D6;--info-bg:#1E2F3B;--grey:#9AA79F;--grey-bg:#262D29;--link:#8FB8D6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px;line-height:1.45}
+.mono,.num,td.num,th.num{font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-variant-numeric:tabular-nums}
+header{background:var(--surf);border-bottom:1px solid var(--bd);padding:18px 24px 0}
+.hrow{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between;max-width:1480px;margin:0 auto}
+h1{margin:0;font-size:21px;font-weight:600;letter-spacing:-.01em;text-wrap:balance}
+.sub{color:var(--mut);font-size:12.5px;margin-top:4px}
+.badge{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:4px;background:var(--acc);color:var(--acc-ink)}
+.tabs{display:flex;gap:4px;max-width:1480px;margin:14px auto 0;overflow-x:auto}
+.tab{padding:9px 14px;cursor:pointer;border:1px solid transparent;border-bottom:none;border-radius:6px 6px 0 0;font-weight:500;color:var(--mut);white-space:nowrap;background:transparent}
+.tab.on{background:var(--bg);color:var(--ink);border-color:var(--bd);font-weight:600}
+.tab:focus-visible{outline:2px solid var(--acc)}
+main{max-width:1480px;margin:0 auto;padding:18px 24px 80px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+.kpi{background:var(--surf);border:1px solid var(--bd);border-radius:8px;padding:12px 14px}
+.kpi .l{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);font-weight:600}
+.kpi .v{font-size:24px;font-weight:600;margin-top:4px;line-height:1.1}
+.kpi .s{font-size:12px;color:var(--mut);margin-top:4px}
+.kpi.warn .v{color:var(--warn)}.kpi.ok .v{color:var(--ok)}.kpi.info .v{color:var(--info)}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.bar input{font:inherit;color:var(--ink);background:var(--surf);border:1px solid var(--bd);border-radius:6px;padding:7px 10px;min-width:220px}
+.bar input:focus{outline:2px solid var(--acc);border-color:var(--acc)}
+.chip{cursor:pointer;font:inherit;font-size:12.5px;font-weight:500;padding:6px 11px;border-radius:999px;border:1px solid var(--bd);background:var(--surf);color:var(--mut)}
+.chip.on{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
+.chip:focus-visible{outline:2px solid var(--acc)}
+.scroll{overflow-x:auto;background:var(--surf);border:1px solid var(--bd);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{position:sticky;top:0;background:var(--surf2);text-align:left;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);font-weight:600;padding:9px 10px;white-space:nowrap;border-bottom:1px solid var(--bd);z-index:1}
+td{padding:8px 10px;border-bottom:1px solid var(--bd);vertical-align:top}
+tr.po{cursor:pointer}
+tr.po:hover td{background:var(--surf2)}
+td.num,th.num{text-align:right;white-space:nowrap}
+td.nw{white-space:nowrap}
+td.prod{min-width:250px}
+.pill{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.p-ok{background:var(--ok-bg);color:var(--ok)}.p-warn{background:var(--warn-bg);color:var(--warn)}.p-crit{background:var(--crit-bg);color:var(--crit)}.p-info{background:var(--info-bg);color:var(--info)}.p-grey{background:var(--grey-bg);color:var(--grey)}
+.prog{display:inline-flex;gap:2px;vertical-align:middle;margin-right:6px}
+.prog i{display:block;width:9px;height:12px;border-radius:2px;background:var(--grey-bg)}
+.prog i.s{background:var(--info)}.prog i.g{background:var(--ok)}.prog i.p{background:var(--warn-bg);border:1px solid var(--warn)}
+a{color:var(--link)}
+a.po{font-family:"IBM Plex Mono",monospace;font-weight:600;text-decoration:none}
+a.po:hover{text-decoration:underline}
+tr.det td{background:var(--bg);padding:12px 14px 14px 34px}
+.det-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.det h4{margin:0 0 6px;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.det table{font-size:12.5px}
+.det th{position:static;background:transparent;border-bottom:1px solid var(--bd)}
+.det td{padding:5px 8px}
+.note{font-size:12.5px;color:var(--mut);margin-top:8px;max-width:78ch}
+.act{margin:0;padding-left:18px;font-size:12.5px}
+.act li{margin:3px 0}
+.card{background:var(--surf);border:1px solid var(--bd);border-radius:8px;padding:14px 16px;margin-bottom:12px}
+.card h3{margin:0 0 8px;font-size:14px}
+.owner{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;background:var(--surf2);margin-right:6px}
+.foot{color:var(--faint);font-size:12px;margin-top:22px;max-width:100ch}
+.hide{display:none !important}
+.muted{color:var(--faint)}
+@media (max-width:700px){main{padding:12px}header{padding:12px 12px 0}.kpi .v{font-size:20px}}
+</style>
+</head><body>
+<header>
+  <div class="hrow">
+    <div><h1>Piniera GmbH × Natural Trade — Órdenes 2026</h1><div class="sub">Estatus de contratos, embarques y facturación · corte 2026-09-08 · CIF Altamira</div></div>
+    <div><span class="badge">Vista aserradero</span></div>
+  </div>
+  <div class="tabs" id="tabs"></div>
+</header>
+<main>
+  <div class="kpis" id="kpis"></div>
+  <section id="v-ordenes">
+    <div class="bar"><input type="search" id="q" placeholder="Buscar PO, contrato, BL, factura…" aria-label="Buscar"><span id="chips"></span></div>
+    <div class="scroll"><table id="t-po"></table></div>
+    <p class="foot">Clic en una fila para ver embarques, facturas y acciones. Ctr = contenedor 40'. Costo CIF Altamira, DTHC no incluido. Barras: <span class="prog"><i class="g"></i></span> recibido en Altamira, <span class="prog"><i class="s"></i></span> embarcado / en tránsito, <span class="prog"><i class="p"></i></span> pendiente en aserradero.</p>
+  </section>
+  <section id="v-embarques" class="hide"><div class="scroll"><table id="t-emb"></table></div></section>
+    <section id="v-pend" class="hide" ><div id="pend"></div></section>
+  <p class="foot">Fuentes: NetSuite (PO, recepciones, facturas, pagos, SO) al corte 2026-09-08; documentos de embarque Piniera / HS Timber (facturas HSTP, packing lists, SWB) y correos de Logística NT. Los embarques del 31-Ago (NT-2601040 y NT-2601111) aún no están registrados en NetSuite.</p>
+</main>
+<script>
+var MODE="aserradero";
+var D={"as_of": "2026-09-08", "ns": "https://4830110.app.netsuite.com/app/accounting/transactions/transaction.nl?id=", "pos": [{"po": "NT-2600410", "po_id": 602291, "icpo": "GF-47391", "icpo_id": 602290, "contract": "26-1159", "po_date": "2026-02-19", "product": "86x137 Pino Elliottii/Taeda Grado Tarima (III-V) Rough KD", "lengths": "3048 / 2440 mm", "price": 230, "price_orig": 230, "ctr": 6, "m3": 314.496, "total": 72334.08, "tipo": "Directa", "ns_status": "Fully Billed", "plan_ship": "2026-03-23", "pay": "Pagado (prepago 15-May-2026)", "customer_app": "", "shipments": [{"ctr": 6, "bl": "MEDUWS058800 (MSC)", "bl_date": "2026-05-10", "nt_rcpt": "2026-05-10", "eta": "2026-06-06", "gf_rcpt": "2026-07-24", "invoices": "176050107/112", "inv_total": 72334.08, "docs": "2026-05-12"}], "sales": [], "notes": "", "actions": [], "ctr_shipped": 6, "ctr_received_nt": 6, "ctr_received_gf": 6, "ctr_pending": 0, "ctr_sold": 0, "ctr_available": 0, "sales_total": 0, "cost_per_ctr": 12055.68, "estado": "Entregada", "notes_ext": ""}, {"po": "NT-2600421", "po_id": 603352, "icpo": "GF-47395", "icpo_id": 603351, "contract": "26-1223", "po_date": "2026-02-23", "product": "15x86 Pino Elliottii/Taeda Mill Run (tablas III-V) Rough KD", "lengths": "3050 / 2440 mm", "price": 230, "price_orig": 230, "ctr": 6, "m3": 289.603, "total": 66608.69, "tipo": "Directa", "ns_status": "Partially Received", "plan_ship": "2026-03-23", "pay": "Pagado (1ª entrega 8-May, 2ª entrega 3-Jul)", "customer_app": "", "shipments": [{"ctr": 4, "bl": "MEDUWS043307 (MSC)", "bl_date": "2026-04-17", "nt_rcpt": "2026-04-17", "eta": "2026-05-22", "gf_rcpt": "2026-05-22", "invoices": "176040622-5", "inv_total": 43832.48, "docs": "2026-04-27"}, {"ctr": 2, "bl": "MEDUWS074930 (MSC) · vía PO NT-2600421B", "bl_date": "2026-06-04", "nt_rcpt": "2026-06-04", "eta": "2026-07-04", "gf_rcpt": "2026-07-09", "invoices": "176060290, 176060291", "inv_total": 21720.28, "docs": "2026-06-17"}], "sales": [], "notes": "Entregada en 2 embarques (4+2 ctr). Reclamo de calidad abierto (manchas, suciedad, insectos, variación de espesor): NC ofrecida por Piniera US$2,500 — pendiente cerrar.", "actions": [], "ctr_shipped": 6, "ctr_received_nt": 6, "ctr_received_gf": 6, "ctr_pending": 0, "ctr_sold": 0, "ctr_available": 0, "sales_total": 0, "cost_per_ctr": 11101.45, "estado": "Entregada", "notes_ext": "Entregada en 2 embarques (4+2 ctr). Reclamo de calidad abierto (manchas, suciedad, insectos, variación de espesor): NC ofrecida por Piniera US$2,500 — pendiente cerrar."}, {"po": "NT-2600421B", "po_id": 660313, "icpo": "GF-47829", "icpo_id": 660312, "contract": "26-1223 (2ª entrega)", "po_date": "2026-06-30", "product": "15x86 Pino Elliottii/Taeda Mill Run (tablas III-V) Rough KD", "lengths": "3050 / 2440 mm", "price": 230, "price_orig": 230, "ctr": 2, "m3": 94.436, "total": 21720.28, "tipo": "Split de NT-2600421", "ns_status": "Fully Billed", "plan_ship": "2026-03-23", "pay": "Pagado 3-Jul-2026", "customer_app": "", "split_of": "NT-2600421", "shipments": [], "sales": [], "notes": "Split de NT-2600421 (2 ctr, mismo contrato 26-1223).", "actions": [], "ctr_shipped": 0, "ctr_received_nt": 0, "ctr_received_gf": 0, "ctr_pending": 0, "ctr_sold": 0, "ctr_available": 0, "sales_total": 0, "cost_per_ctr": 10860.14, "estado": "Split (contabilizado en NT-2600421)", "notes_ext": "Split de NT-2600421 (2 ctr, mismo contrato 26-1223)."}, {"po": "NT-2600787", "po_id": 631377, "icpo": "GF-47632", "icpo_id": 631375, "contract": "26-2879", "po_date": "2026-04-27", "product": "86x125 Pino Elliottii/Taeda Mill Run Rough KD", "lengths": "3048 / 2440 mm", "price": 260, "price_orig": 250, "ctr": 4, "m3": 191.296, "total": 49736.96, "tipo": "Directa", "ns_status": "Fully Billed", "plan_ship": "2026-05-11", "pay": "Pagado 4-Ago-2026 (wire)", "customer_app": "", "shipments": [{"ctr": 4, "bl": "MEDUWS092791 (MSC, bkg 153IAR0657853)", "bl_date": "2026-07-14", "nt_rcpt": "2026-07-02", "eta": "2026-08-01", "gf_rcpt": "2026-09-02", "invoices": "2617-04250", "inv_total": 49736.96, "docs": "2026-06-29"}], "sales": [], "notes": "Precio ajustado +US$10/m³ por GRI MSC (acuerdo 5-Jun).", "actions": [], "ctr_shipped": 4, "ctr_received_nt": 4, "ctr_received_gf": 4, "ctr_pending": 0, "ctr_sold": 0, "ctr_available": 0, "sales_total": 0, "cost_per_ctr": 12434.24, "estado": "Entregada", "notes_ext": "Precio ajustado +US$10/m³ por GRI MSC (acuerdo 5-Jun)."}, {"po": "NT-2600832", "po_id": 635423, "icpo": "GF-47658", "icpo_id": 635421, "contract": "26-3228", "po_date": "2026-05-06", "product": "86x137 Pino Elliottii/Taeda Grado Tarima (87x138) Rough KD", "lengths": "3050 / 2440 mm", "price": 266, "price_orig": 256, "ctr": 6, "m3": 295.463, "total": 78593.16, "tipo": "Inventario", "ns_status": "Fully Billed", "plan_ship": "2026-06-01", "pay": "Pagado 4-Ago-2026 (wire)", "customer_app": "", "shipments": [{"ctr": 6, "bl": "MAEU 271437252 (Maersk)", "bl_date": "2026-07-21", "nt_rcpt": "2026-07-21", "eta": "2026-08-23", "gf_rcpt": "2026-08-27", "invoices": "176070735 … 176070740 (6)", "inv_total": 78593.16, "docs": "2026-07-27"}], "sales": [], "notes": "Precio ajustado +US$10/m³ por GRI MSC.", "actions": [], "ctr_shipped": 6, "ctr_received_nt": 6, "ctr_received_gf": 6, "ctr_pending": 0, "ctr_sold": 0, "ctr_available": 0, "sales_total": 0, "cost_per_ctr": 13098.86, "estado": "Entregada", "notes_ext": "Precio ajustado +US$10/m³ por GRI MSC."}, {"po": "NT-2600833", "po_id": 635426, "icpo": "GF-47659", "icpo_id": 635424, "contract": "26-3230", "po_date": "2026-05-06", "product": "86x137 Pino Elliottii/Taeda Grado Tarima (87x139) Rough KD", "lengths": "3050 / 2440 mm", "price": 266, "price_orig": 256, "ctr": 5, "m3": 245.64, "total": 65340.24, "tipo": "Inventario", "ns_status": "Fully Billed", "plan_ship": "2026-06-01", "pay": "Pagado 11-Ago-2026 (wire)", "customer_app": "", "shipments": [{"ctr": 5, "bl": "MAEU 271437130 (Maersk)", "bl_date": "2026-07-21", "nt_rcpt": "2026-07-21", "eta": "2026-08-23", "gf_rcpt": "2026-08-27", "invoices": "176070730 … 176070734 (5)", "inv_total": 65340.24, "docs": "2026-07-27"}], "sales": [], "notes": "Precio ajustado +US$10/m³ por GRI MSC.", "actions": [], "ctr_shipped": 5, "ctr_received_nt": 5, "ctr_received_gf": 5, "ctr_pending": 0, "ctr_sold": 0, "ctr_available": 0, "sales_total": 0, "cost_per_ctr": 13068.05, "estado": "Entregada", "notes_ext": "Precio ajustado +US$10/m³ por GRI MSC."}, {"po": "NT-2600834", "po_id": 635428, "icpo": "GF-47660", "icpo_id": 635427, "contract": "26-3231", "po_date": "2026-05-06", "product": "86x137 Pino Elliottii/Taeda Grado Tarima (89x140) Rough KD", "lengths": "3050 / 2440 mm", "price": 266, "price_orig": 256, "ctr": 10, "m3": 524.4, "total": 139490.4, "tipo": "Directa", "ns_status": "Fully Billed", "plan_ship": "2026-06-01", "pay": "Pagado 7-Ago-2026 (wire)", "customer_app": "", "shipments": [{"ctr": 10, "bl": "MEDUWS119487 (MSC, bkg 153IAR0658593)", "bl_date": "2026-07-24", "nt_rcpt": "2026-07-24", "eta": "2026-08-22", "gf_rcpt": "2026-08-26", "invoices": "176070841 … 176070850 (10)", "inv_total": 139490.4, "docs": "2026-07-30"}], "sales": [], "notes": "Precio ajustado +US$10/m³ por GRI MSC.", "actions": [], "ctr_shipped": 10, "ctr_received_nt": 10, "ctr_received_gf": 10, "ctr_pending": 0, "ctr_sold": 0, "ctr_available": 0, "sales_total": 0, "cost_per_ctr": 13949.04, "estado": "Entregada", "notes_ext": "Precio ajustado +US$10/m³ por GRI MSC."}, {"po": "NT-2601040", "po_id": 657284, "icpo": "GF-47799", "icpo_id": 657283, "contract": "26-3849", "po_date": "2026-06-22", "product": "86x137 Pino Elliottii/Taeda Mill Run (89x140) Rough KD", "lengths": "3050 / 2440 mm", "price": 280, "price_orig": 280, "ctr": 10, "m3": 524.36, "total": 146820.8, "tipo": "Inventario", "ns_status": "Pending Receipt", "plan_ship": "2026-07-20", "pay": "Pendiente (14 días vs BL)", "customer_app": "", "shipments": [{"ctr": 5, "bl": "SWB BUA0376677", "bl_date": "2026-08-31", "nt_rcpt": "", "eta": "", "gf_rcpt": "", "invoices": "176080768 … 176080772 (5) · PL 2617-05827/28/29/30, 2617-06089", "inv_total": null, "docs": "2026-08-31"}], "sales": [], "notes": "Documentos recibidos 31-Ago para 5 ctr (SWB BUA0376677). Plan original 20-Jul. Faltan 5 ctr.", "actions": ["PINIERA: confirmar fecha de embarque de los 5 ctr restantes del contrato 26-3849."], "ctr_shipped": 5, "ctr_received_nt": 0, "ctr_received_gf": 0, "ctr_pending": 5, "ctr_sold": 0, "ctr_available": 0, "sales_total": 0, "cost_per_ctr": 14682.08, "estado": "Parcial: 5/10 embarcados", "notes_ext": "Documentos recibidos 31-Ago para 5 ctr (SWB BUA0376677). Plan original 20-Jul. Faltan 5 ctr."}, {"po": "NT-2601111", "po_id": 663838, "icpo": "GF-47850", "icpo_id": 663837, "contract": "26-4334", "po_date": "2026-07-06", "product": "86x137 Pino Elliottii/Taeda Mill Run (87x139) Rough KD", "lengths": "3050 / 2440 mm", "price": 275, "price_orig": 275, "ctr": 10, "m3": 524.36, "total": 144198.9, "tipo": "Directa", "ns_status": "Pending Receipt", "plan_ship": "2026-08-10", "pay": "Pendiente (14 días vs BL)", "customer_app": "", "shipments": [{"ctr": 5, "bl": "SWB BUA0376678", "bl_date": "2026-08-31", "nt_rcpt": "", "eta": "", "gf_rcpt": "", "invoices": "176080567 … 176080571 (5) · PL 2617-05884 … 05888", "inv_total": null, "docs": "2026-08-31"}], "sales": [], "notes": "Documentos recibidos 31-Ago para 5 ctr (SWB BUA0376678). Plan original 10-Ago. Faltan 5 ctr.", "actions": ["PINIERA: confirmar embarque de los 5 ctr restantes del contrato 26-4334 (plan original 10-Ago)."], "ctr_shipped": 5, "ctr_received_nt": 0, "ctr_received_gf": 0, "ctr_pending": 5, "ctr_sold": 0, "ctr_available": 0, "sales_total": 0, "cost_per_ctr": 14419.89, "estado": "Parcial: 5/10 embarcados", "notes_ext": "Documentos recibidos 31-Ago para 5 ctr (SWB BUA0376678). Plan original 10-Ago. Faltan 5 ctr."}, {"po": "NT-2601122", "po_id": 664803, "icpo": "GF-47859", "icpo_id": 664802, "contract": "n/d", "po_date": "2026-07-08", "product": "86x137 Pino Elliottii/Taeda Mill Run Rough KD", "lengths": "3050 / 2440 mm", "price": 275, "price_orig": 275, "ctr": 10, "m3": 524.36, "total": 144198.9, "tipo": "Especulación", "ns_status": "Pending Receipt", "plan_ship": "2026-08-10", "pay": "Pendiente", "customer_app": "", "shipments": [], "sales": [], "notes": "Sin contrato Piniera identificado ni documentos de embarque.", "actions": ["PINIERA: confirmar si NT-2601122 (10 ctr, US$275) está en producción y bajo qué contrato; no aparece en la lista de órdenes pendientes de Juan (1-Sep)."], "ctr_shipped": 0, "ctr_received_nt": 0, "ctr_received_gf": 0, "ctr_pending": 10, "ctr_sold": 0, "ctr_available": 0, "sales_total": 0, "cost_per_ctr": 14419.89, "estado": "Pendiente de embarque", "notes_ext": "Sin contrato Piniera identificado ni documentos de embarque."}, {"po": "NT-2601151", "po_id": 668564, "icpo": "GF-47878", "icpo_id": 668563, "contract": "s/contrato (posible duplicado)", "po_date": "2026-07-14", "product": "86x137 Pino Elliottii/Taeda Mill Run Rough KD", "lengths": "3050 / 2440 mm", "price": 275, "price_orig": 275, "ctr": 8, "m3": 419.488, "total": 115359.12, "tipo": "Especulación", "ns_status": "Pending Receipt", "plan_ship": "2026-08-24", "pay": "—", "customer_app": "", "shipments": [], "sales": [], "dup": true, "notes": "Sin contrato asociado; probable duplicado del programa ACON (verificar).", "actions": [], "ctr_shipped": 0, "ctr_received_nt": 0, "ctr_received_gf": 0, "ctr_pending": 8, "ctr_sold": 0, "ctr_available": 0, "sales_total": 0, "cost_per_ctr": 14419.89, "estado": "Posible duplicado — confirmar", "notes_ext": "Sin contrato asociado; probable duplicado del programa ACON (verificar)."}, {"po": "NT-2601152", "po_id": 668566, "icpo": "GF-47879", "icpo_id": 668565, "contract": "s/contrato (posible duplicado)", "po_date": "2026-07-14", "product": "86x137 Pino Elliottii/Taeda Mill Run Rough KD", "lengths": "3050 / 2440 mm", "price": 275, "price_orig": 275, "ctr": 8, "m3": 419.488, "total": 115359.12, "tipo": "Especulación", "ns_status": "Pending Receipt", "plan_ship": "2026-08-24", "pay": "—", "customer_app": "", "shipments": [], "sales": [], "dup": true, "notes": "Ver NT-2601151.", "actions": [], "ctr_shipped": 0, "ctr_received_nt": 0, "ctr_received_gf": 0, "ctr_pending": 8, "ctr_sold": 0, "ctr_available": 0, "sales_total": 0, "cost_per_ctr": 14419.89, "estado": "Posible duplicado — confirmar", "notes_ext": "Ver NT-2601151."}, {"po": "NT-2601153", "po_id": 668568, "icpo": "GF-47880", "icpo_id": 668567, "contract": "s/contrato (posible duplicado)", "po_date": "2026-07-14", "product": "86x137 Pino Elliottii/Taeda Mill Run Rough KD", "lengths": "3050 / 2440 mm", "price": 275, "price_orig": 275, "ctr": 4, "m3": 209.744, "total": 57679.56, "tipo": "Especulación", "ns_status": "Pending Receipt", "plan_ship": "2026-08-24", "pay": "—", "customer_app": "", "shipments": [], "sales": [], "dup": true, "notes": "Ver NT-2601151.", "actions": [], "ctr_shipped": 0, "ctr_received_nt": 0, "ctr_received_gf": 0, "ctr_pending": 4, "ctr_sold": 0, "ctr_available": 0, "sales_total": 0, "cost_per_ctr": 14419.89, "estado": "Posible duplicado — confirmar", "notes_ext": "Ver NT-2601151."}, {"po": "NT-2601199", "po_id": 670908, "icpo": "GF-47918", "icpo_id": 670907, "contract": "—", "po_date": "2026-07-21", "product": "86x137 Grado Tarima 3050", "lengths": "3050 mm", "price": 256, "price_orig": 256, "ctr": 2, "m3": 82.794, "total": 21195.26, "tipo": "Inventario", "ns_status": "Rejected by Supervisor", "plan_ship": "2026-07-25", "pay": "—", "customer_app": "", "shipments": [], "sales": [], "cancelled": true, "notes": "Cancelada.", "actions": [], "ctr_shipped": 0, "ctr_received_nt": 0, "ctr_received_gf": 0, "ctr_pending": 0, "ctr_sold": 0, "ctr_available": 0, "sales_total": 0, "cost_per_ctr": 10597.63, "estado": "Cancelada", "notes_ext": "Cancelada."}, {"po": "NT-2601296", "po_id": 680831, "icpo": "GF-47968", "icpo_id": 680830, "contract": "26-4964", "po_date": "2026-08-06", "product": "86x137 Pino Elliottii/Taeda Mill Run Rough KD", "lengths": "2440 / fillers 1220 mm (acordado); PO NS dice 3050/2440", "price": 275, "price_orig": 275, "ctr": 8, "m3": 419.488, "total": 115359.12, "tipo": "Especulación", "ns_status": "Pending Receipt", "plan_ship": "2026-08-31", "pay": "Pendiente (30 días vs BL)", "customer_app": "", "shipments": [], "sales": [], "notes": "Programa ACON 1,000 m³. Acuerdo 1/4-Sep: OC 26-4964 → 10 ctr 2440/1220 con 10% grado descarte a US$245/m³. Pendiente OC actualizada y fecha de embarque.", "actions": ["PINIERA: enviar OCs actualizadas 26-4964 (10 ctr 2440/1220) y 26-4965 (10 ctr 3050/2440) y fecha de embarque."], "ctr_shipped": 0, "ctr_received_nt": 0, "ctr_received_gf": 0, "ctr_pending": 8, "ctr_sold": 0, "ctr_available": 0, "sales_total": 0, "cost_per_ctr": 14419.89, "estado": "Pendiente de embarque", "notes_ext": "Programa ACON 1,000 m³. Acuerdo 1/4-Sep: OC 26-4964 → 10 ctr 2440/1220 con 10% grado descarte a US$245/m³. Pendiente OC actualizada y fecha de embarque."}, {"po": "NT-2601298", "po_id": 680833, "icpo": "GF-47970", "icpo_id": 680832, "contract": "26-4965", "po_date": "2026-08-06", "product": "86x137 Pino Elliottii/Taeda Mill Run Rough KD", "lengths": "3050 / 2440 mm", "price": 275, "price_orig": 275, "ctr": 8, "m3": 419.488, "total": 115359.12, "tipo": "Especulación", "ns_status": "Pending Receipt", "plan_ship": "2026-08-31", "pay": "Pendiente (30 días vs BL)", "customer_app": "", "shipments": [], "sales": [], "notes": "Acuerdo 1/4-Sep: OC 26-4965 → 10 ctr 3050/2440 con 10% grado descarte a US$245/m³.", "actions": [], "ctr_shipped": 0, "ctr_received_nt": 0, "ctr_received_gf": 0, "ctr_pending": 8, "ctr_sold": 0, "ctr_available": 0, "sales_total": 0, "cost_per_ctr": 14419.89, "estado": "Pendiente de embarque", "notes_ext": "Acuerdo 1/4-Sep: OC 26-4965 → 10 ctr 3050/2440 con 10% grado descarte a US$245/m³."}, {"po": "NT-2601303", "po_id": 681382, "icpo": "GF-47975", "icpo_id": 681381, "contract": "26-4966", "po_date": "2026-08-06", "product": "86x137 Pino Elliottii/Taeda Mill Run Rough KD", "lengths": "3050 / 2440 mm", "price": 275, "price_orig": 275, "ctr": 4, "m3": 209.744, "total": 57679.56, "tipo": "Especulación", "ns_status": "Pending Receipt", "plan_ship": "2026-08-31", "pay": "—", "customer_app": "", "shipments": [], "sales": [], "notes": "OC 26-4966 se absorbe en 26-4964 / 26-4965 (10+10).", "actions": [], "ctr_shipped": 0, "ctr_received_nt": 0, "ctr_received_gf": 0, "ctr_pending": 4, "ctr_sold": 0, "ctr_available": 0, "sales_total": 0, "cost_per_ctr": 14419.89, "estado": "Pendiente de embarque", "notes_ext": "OC 26-4966 se absorbe en 26-4964 / 26-4965 (10+10)."}], "totals": {"ctr_ordered": 87, "ctr_shipped": 47, "ctr_received_gf": 37, "ctr_pending": 40, "ctr_sold": null, "ctr_available": null, "usd_ordered": 1195719.93, "usd_delivered": 472103.53, "usd_open": 723616.4, "usd_dup": 288397.8, "m3_ordered": 4482.698, "n_pos": 12}, "inv_atm": [], "inv_transit": []};
+var INT = MODE==="interno";
+function esc(s){s=(s==null?"":""+s);return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function usd(n,d){if(n==null||n==="")return "";return "US$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:d==null?2:d,maximumFractionDigits:d==null?2:d});}
+function n3(n){return n==null?"":Number(n).toLocaleString("en-US",{minimumFractionDigits:3,maximumFractionDigits:3});}
+var MES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+function dt(s){if(!s)return "";var p=s.split("-");return (+p[2])+"-"+MES[+p[1]-1]+"-"+p[0].slice(2);}
+function prog(p){return !(p.cancelled||p.split_of||p.dup);}
+function pill(p){
+  var e=p.estado;
+  if(p.cancelled)return '<span class="pill p-grey">Cancelada</span>';
+  if(p.split_of)return '<span class="pill p-grey">Split de NT-2600421</span>';
+  if(p.dup)return '<span class="pill p-grey">Posible duplicado</span>';
+  if(e==="Entregada")return '<span class="pill p-ok">Entregada</span>';
+  if(e.indexOf("Parcial")===0)return '<span class="pill p-warn">'+esc(e)+'</span>';
+  if(e.indexOf("tránsito")>=0)return '<span class="pill p-info">'+esc(e)+'</span>';
+  return '<span class="pill p-crit">'+esc(e)+'</span>';
+}
+function bars(p){
+  if(!prog(p))return "";
+  var h='<span class="prog" title="'+p.ctr_received_gf+' recibidos · '+(p.ctr_shipped-p.ctr_received_gf)+' en tránsito · '+p.ctr_pending+' pendientes">';
+  for(var i=0;i<p.ctr;i++){var c=i<p.ctr_received_gf?"g":(i<p.ctr_shipped?"s":"p");h+='<i class="'+c+'"></i>';}
+  return h+'</span>';
+}
+function nslink(id,txt,cls){return INT?'<a class="'+(cls||"")+'" href="'+D.ns+id+'" target="_blank" rel="noopener">'+esc(txt)+'</a>':'<span class="mono" style="font-weight:600">'+esc(txt)+'</span>';}
+var TABS=[["ordenes","Órdenes"],["embarques","Embarques"]].concat(INT?[["ventas","Ventas e inventario"]]:[]).concat([["pend","Pendientes"]]);
+var cur="ordenes", filt="todas", q="";
+function renderTabs(){document.getElementById("tabs").innerHTML=TABS.map(function(t){return '<button class="tab'+(t[0]===cur?" on":"")+'" data-t="'+t[0]+'">'+t[1]+'</button>'}).join("");
+  document.querySelectorAll(".tab").forEach(function(b){b.onclick=function(){cur=b.dataset.t;renderTabs();["ordenes","embarques","ventas","pend"].forEach(function(v){var el=document.getElementById("v-"+v);if(el)el.classList.toggle("hide",v!==cur);});};});}
+function kpis(){
+  var T=D.totals;
+  var k=[["Contenedores pedidos 2026",T.ctr_ordered,T.n_pos+" PO · "+n3(T.m3_ordered)+" m³",""],
+         ["Embarcados por Piniera",T.ctr_shipped,T.ctr_received_gf+" ya recibidos en Altamira","ok"],
+         ["Pendientes en aserradero",T.ctr_pending,"5+5 saldos parciales · 10 NT-2601122 · 20 programa ACON","warn"],
+         ["Compra CIF Altamira",usd(T.usd_ordered,0),usd(T.usd_delivered,0)+" entregado · "+usd(T.usd_open,0)+" abierto","info"]];
+  if(INT){k.push(["Vendidos / comprometidos",T.ctr_sold,"con Sales Order ligada","ok"]);k.push(["Disponibles para venta",T.ctr_available,"7 físicos en ATM Altamira · 24 por llegar","warn"]);}
+  document.getElementById("kpis").innerHTML=k.map(function(x){return '<div class="kpi '+x[3]+'"><div class="l">'+x[0]+'</div><div class="v num">'+x[1]+'</div><div class="s">'+x[2]+'</div></div>'}).join("");
+}
+function chips(){
+  var c=[["todas","Todas"],["abiertas","Abiertas"],["entregadas","Entregadas"],["revisar","Revisar (dup./cancel.)"]];
+  document.getElementById("chips").innerHTML=c.map(function(x){return '<button class="chip'+(filt===x[0]?" on":"")+'" data-f="'+x[0]+'">'+x[1]+'</button>'}).join("");
+  document.querySelectorAll(".chip").forEach(function(b){b.onclick=function(){filt=b.dataset.f;chips();tablePO();};});
+}
+function matches(p){
+  if(filt==="abiertas"&&!(prog(p)&&p.estado!=="Entregada"))return false;
+  if(filt==="entregadas"&&!(prog(p)&&p.estado==="Entregada"))return false;
+  if(filt==="revisar"&&prog(p))return false;
+  if(!q)return true;
+  var hay=[p.po,p.icpo,p.contract,p.product,p.notes].concat(p.shipments.map(function(s){return s.bl+" "+s.invoices})).concat(INT?p.sales.map(function(s){return s.so+" "+s.customer}):[]).join(" ").toLowerCase();
+  return hay.indexOf(q)>=0;
+}
+function tablePO(){
+  var h='<thead><tr><th>PO Natural Trade</th>'+(INT?'<th>ICPO GF</th>':'')+'<th>Contrato</th><th>Fecha PO</th><th>Producto</th><th class="num">Ctr</th><th class="num">m³</th><th class="num">USD/m³ CIF</th><th class="num">Total CIF Altamira</th><th>Plan</th><th>Avance</th><th class="num">Emb.</th><th class="num">Pend.</th>'+(INT?'<th class="num">Vend.</th><th class="num">Disp.</th>':'')+'<th>Estado</th><th>Pago</th></tr></thead><tbody>';
+  D.pos.filter(matches).forEach(function(p,i){
+    h+='<tr class="po" data-i="'+D.pos.indexOf(p)+'"><td class="nw">'+nslink(p.po_id,p.po,"po")+'</td>'+(INT?'<td class="nw">'+nslink(p.icpo_id,p.icpo,"po")+'</td>':'')+'<td class="nw mono">'+esc(p.contract)+'</td><td class="nw">'+dt(p.po_date)+'</td><td class="prod">'+esc(p.product)+'<div class="muted" style="font-size:11.5px">'+esc(p.lengths)+'</div></td><td class="num">'+p.ctr+'</td><td class="num">'+n3(p.m3)+'</td><td class="num">'+(p.price!==p.price_orig?'<span title="original US$'+p.price_orig+'">':'')+usd(p.price,0)+(p.price!==p.price_orig?'*</span>':'')+'</td><td class="num">'+usd(p.total)+'</td><td class="nw">'+dt(p.plan_ship)+'</td><td class="nw">'+bars(p)+'</td><td class="num">'+(prog(p)?p.ctr_shipped:"—")+'</td><td class="num">'+(prog(p)?p.ctr_pending:"—")+'</td>'+(INT?'<td class="num">'+(prog(p)?p.ctr_sold:"—")+'</td><td class="num">'+(prog(p)?p.ctr_available:"—")+'</td>':'')+'<td>'+pill(p)+'</td><td style="max-width:180px">'+esc(p.pay)+'</td></tr>';
+  });
+  h+='</tbody>';
+  document.getElementById("t-po").innerHTML=h;
+  document.querySelectorAll("tr.po").forEach(function(tr){tr.onclick=function(e){if(e.target.tagName==="A")return;toggleDet(tr);};});
+}
+function toggleDet(tr){
+  var nx=tr.nextElementSibling;
+  if(nx&&nx.classList.contains("det")){nx.remove();return;}
+  var p=D.pos[+tr.dataset.i];var cols=tr.children.length;
+  var h='<tr class="det"><td colspan="'+cols+'"><div class="det-grid">';
+  h+='<div><h4>Embarques y facturas Piniera</h4>';
+  if(p.shipments.length){h+='<table><tr><th>Ctr</th><th>BL / SWB</th><th>Fecha BL</th><th>Recepción NT</th><th>ETA</th><th>Recepción GF Altamira</th><th>Facturas</th><th class="num">USD</th></tr>';
+    p.shipments.forEach(function(s){h+='<tr><td class="num">'+s.ctr+'</td><td>'+esc(s.bl)+'</td><td class="nw">'+dt(s.bl_date)+'</td><td class="nw">'+(s.nt_rcpt?dt(s.nt_rcpt):'<span class="pill p-warn">sin registro NS</span>')+'</td><td class="nw">'+dt(s.eta)+'</td><td class="nw">'+(s.gf_rcpt?dt(s.gf_rcpt):'—')+'</td><td class="mono" style="font-size:11.5px">'+esc(s.invoices)+'</td><td class="num">'+(s.inv_total?usd(s.inv_total):'—')+'</td></tr>';});
+    h+='</table>';}
+  else h+='<div class="note">Sin embarques documentados.</div>';
+  if(prog(p)&&p.ctr_pending>0)h+='<div class="note"><b>'+p.ctr_pending+' ctr pendientes</b> de embarque en Piniera (plan PO '+dt(p.plan_ship)+').</div>';
+  h+='</div>';
+  if(INT){h+='<div><h4>Sales Orders finales (Global Forest → cliente)</h4>';
+    if(p.sales.length){h+='<table><tr><th>SO</th><th>Cliente</th><th class="num">Ctr</th><th class="num">m³</th><th class="num">Venta USD/m³</th><th class="num">Total SO (IVA)</th><th>Estatus</th><th>Factura</th></tr>';
+      p.sales.forEach(function(s){h+='<tr><td>'+nslink(s.so_id,s.so,"po")+'</td><td>'+esc(s.customer)+'</td><td class="num">'+s.ctr+'</td><td class="num">'+n3(s.m3)+'</td><td class="num">'+usd(s.price)+'</td><td class="num">'+usd(s.total)+'</td><td>'+(s.status==="Facturada"?'<span class="pill p-ok">Facturada</span>':'<span class="pill p-warn">'+esc(s.status)+'</span>')+'</td><td class="nw">'+esc(s.invoice)+(s.inv_date?' · '+dt(s.inv_date):'')+'</td></tr>';});
+      h+='</table>';}
+    else h+='<div class="note">Sin Sales Order ligada'+(prog(p)?' → <b>'+p.ctr_available+' ctr disponibles</b>':'')+'.</div>';
+    if(prog(p)&&p.sales.length&&p.ctr_available>0)h+='<div class="note"><b>'+p.ctr_available+' ctr sin vender.</b></div>';
+    h+='</div>';}
+  h+='</div>';
+  var note=INT?p.notes:p.notes_ext;
+  if(note)h+='<div class="note">'+esc(note)+'</div>';
+  var acts=INT?p.actions:p.actions.filter(function(a){return a.indexOf("PINIERA")===0;});
+  if(acts.length)h+='<ul class="act">'+acts.map(function(a){return '<li>'+esc(a)+'</li>'}).join("")+'</ul>';
+  h+='</td></tr>';
+  tr.insertAdjacentHTML("afterend",h);
+}
+function tableEmb(){
+  var h='<thead><tr><th>PO</th><th>Contrato</th><th class="num">Ctr</th><th>BL / SWB</th><th>Fecha BL / docs</th><th>Recepción NT</th><th>ETA Altamira</th><th>Recepción GF Altamira</th><th>Facturas Piniera</th><th class="num">USD</th><th>Estatus</th></tr></thead><tbody>';
+  D.pos.forEach(function(p){
+    p.shipments.forEach(function(s){var st=s.gf_rcpt?'<span class="pill p-ok">Recibido en Altamira</span>':(s.nt_rcpt?'<span class="pill p-info">En tránsito</span>':'<span class="pill p-warn">Embarcado · sin registro en NetSuite</span>');
+      h+='<tr><td class="nw">'+nslink(p.po_id,p.po,"po")+'</td><td class="mono nw">'+esc(p.contract)+'</td><td class="num">'+s.ctr+'</td><td>'+esc(s.bl)+'</td><td class="nw">'+dt(s.bl_date)+'</td><td class="nw">'+(s.nt_rcpt?dt(s.nt_rcpt):'—')+'</td><td class="nw">'+dt(s.eta)+'</td><td class="nw">'+(s.gf_rcpt?dt(s.gf_rcpt):'—')+'</td><td class="mono" style="font-size:11.5px">'+esc(s.invoices)+'</td><td class="num">'+(s.inv_total?usd(s.inv_total):'—')+'</td><td>'+st+'</td></tr>';});
+    if(prog(p)&&p.ctr_pending>0)h+='<tr><td class="nw">'+nslink(p.po_id,p.po,"po")+'</td><td class="mono nw">'+esc(p.contract)+'</td><td class="num">'+p.ctr_pending+'</td><td colspan="6" class="muted">Pendiente de embarque en Piniera · plan PO '+dt(p.plan_ship)+'</td><td></td><td><span class="pill p-crit">Pendiente</span></td></tr>';
+  });
+  document.getElementById("t-emb").innerHTML=h+'</tbody>';
+}
+function tableVen(){
+  if(!INT)return;
+  var T=D.totals,tot=0,fac=0,pen=0;
+  var h='<thead><tr><th>PO</th><th>SO GF</th><th>Cliente</th><th class="num">Ctr</th><th class="num">m³</th><th class="num">Venta USD/m³</th><th class="num">Costo CIF USD/m³</th><th class="num">Bruto USD/m³</th><th class="num">Total SO (IVA)</th><th>Estatus</th><th>Factura GF</th></tr></thead><tbody>';
+  D.pos.forEach(function(p){p.sales.forEach(function(s){tot+=s.total;if(s.status==="Facturada")fac+=s.total;else pen+=s.total;
+    h+='<tr><td class="nw">'+nslink(p.po_id,p.po,"po")+'</td><td class="nw">'+nslink(s.so_id,s.so,"po")+'</td><td>'+esc(s.customer)+'</td><td class="num">'+s.ctr+'</td><td class="num">'+n3(s.m3)+'</td><td class="num">'+usd(s.price)+'</td><td class="num">'+usd(p.price)+'</td><td class="num">'+usd(s.price-p.price)+'</td><td class="num">'+usd(s.total)+'</td><td>'+(s.status==="Facturada"?'<span class="pill p-ok">Facturada</span>':'<span class="pill p-warn">'+esc(s.status)+'</span>')+'</td><td class="nw">'+esc(s.invoice)+(s.inv_date?' · '+dt(s.inv_date):'')+'</td></tr>';});});
+  document.getElementById("t-ven").innerHTML=h+'</tbody>';
+  document.getElementById("kpis-v").innerHTML=[["Ctr vendidos / comprometidos",T.ctr_sold,"de "+T.ctr_ordered+" pedidos","ok"],["Ventas ligadas (IVA incl.)",usd(tot,0),usd(fac,0)+" facturado · "+usd(pen,0)+" pendiente","info"],["Ctr disponibles",T.ctr_available,"7 en ATM Altamira · 4 de NT-2601122 · 20 ACON","warn"]].map(function(x){return '<div class="kpi '+x[3]+'"><div class="l">'+x[0]+'</div><div class="v num">'+x[1]+'</div><div class="s">'+x[2]+'</div></div>'}).join("");
+  var g='<thead><tr><th>PO</th><th>Producto</th><th class="num">Pedidos</th><th class="num">Vendidos</th><th class="num">Disponibles</th><th>Ubicación</th><th class="num">CIF USD/m³</th><th class="num">Valor CIF disponible</th></tr></thead><tbody>';
+  D.pos.filter(function(p){return prog(p)&&p.ctr_available>0}).forEach(function(p){var loc=p.estado==="Entregada"?'<span class="pill p-ok">ATM Altamira (físico)</span>':'<span class="pill p-warn">Por embarcar desde Piniera</span>';
+    g+='<tr><td class="nw">'+nslink(p.po_id,p.po,"po")+'</td><td>'+esc(p.product)+'</td><td class="num">'+p.ctr+'</td><td class="num">'+p.ctr_sold+'</td><td class="num"><b>'+p.ctr_available+'</b></td><td>'+loc+'</td><td class="num">'+usd(p.price,0)+'</td><td class="num">'+usd(p.ctr_available*p.cost_per_ctr,0)+'</td></tr>';});
+  document.getElementById("t-inv").innerHTML=g+'</tbody>';
+}
+function pend(){
+  var h='';
+  D.pos.forEach(function(p){var acts=INT?p.actions:p.actions.filter(function(a){return a.indexOf("PINIERA")===0;});if(!acts.length)return;
+    h+='<div class="card"><h3>'+nslink(p.po_id,p.po,"po")+' <span class="muted" style="font-weight:400">· '+esc(p.contract)+'</span> '+pill(p)+'</h3><ul class="act">'+acts.map(function(a){var o=a.indexOf("JORGE")===0?"JORGE":(a.indexOf("PINIERA")===0?"PINIERA":"GF");return '<li><span class="owner">'+o+'</span>'+esc(a.replace(/^(JORGE|PINIERA): /,""))+'</li>'}).join("")+'</ul></div>';});
+  document.getElementById("pend").innerHTML=h||'<div class="card">Sin pendientes.</div>';
+}
+document.getElementById("q").addEventListener("input",function(e){q=e.target.value.toLowerCase().trim();tablePO();});
+renderTabs();kpis();chips();tablePO();tableEmb();tableVen();pend();
+</script>
+
+</body></html>
