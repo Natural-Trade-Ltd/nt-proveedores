@@ -499,9 +499,15 @@ function drawPng(M){
 $("b-png").addEventListener("click",function(){
   if(!lastM||!lastM.offers.length){toast("Nada que exportar");return;}
   try{
-    var cv=drawPng(lastM);
-    var a=document.createElement("a");a.download="cotizacion-bg-"+(lastM.date||today()).replace(/\//g,"-")+".png";a.href=cv.toDataURL("image/png");document.body.appendChild(a);a.click();document.body.removeChild(a);
-    toast("Imagen descargada");
+    var cv=drawPng(lastM),fname="cotizacion-bg-"+(lastM.date||today()).replace(/\//g,"-")+".png";
+    var direct=function(){var a=document.createElement("a");a.download=fname;a.href=cv.toDataURL("image/png");document.body.appendChild(a);a.click();document.body.removeChild(a);toast("Imagen descargada");};
+    if(window.claude&&typeof window.claude.use==="function"){
+      // Publicado como Artifact de claude.ai: la descarga pasa por el visor.
+      window.claude.use("downloads").then(function(dl){
+        if(!dl)return direct();
+        cv.toBlob(function(blob){dl.save({filename:fname,data:blob}).then(function(){toast("Imagen guardada");}).catch(function(e){if(e&&e.code==="declined")return;toast("No se pudo guardar la imagen: "+(e&&e.message||e));});},"image/png");
+      });
+    }else direct();
   }catch(e){toast("Error al generar imagen: "+e.message);}
 });
 function showTab(t){$("tab-cli").classList.toggle("on",t==="cli");$("tab-int").classList.toggle("on",t==="int");$("view-cli").classList.toggle("hide",t!=="cli");$("view-int").classList.toggle("hide",t!=="int");}
