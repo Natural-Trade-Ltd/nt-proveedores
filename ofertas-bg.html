@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<script>if(location.search.indexOf("v=")<0){location.replace(location.pathname+"?v="+Date.now());}</script>
+<title>Ofertas BG — Matriz proveedores</title>
+<style>
+  :root{--bg:#f3f5f2;--surf:#fff;--surf2:#eef1ec;--ink:#17201b;--mut:#5d6b62;--faint:#8a9790;--bd:#e0e5de;--acc:#2e6b4c;--acc2:#3e8c64;--warn:#f6e6cf;--warnf:#8a5e15;--bad:#f6dede;--badf:#8a2020;--ok:#e6f1ea;--okf:#245a3f}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px}
+  .num{font-variant-numeric:tabular-nums;font-family:ui-monospace,"Cascadia Code","SF Mono",Consolas,monospace}
+  header{background:var(--surf);border-bottom:1px solid var(--bd);padding:14px 20px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+  h1{margin:0;font-size:19px;font-weight:680;letter-spacing:-.01em}
+  header .sub{color:var(--mut);font-size:12.5px}
+  header a{color:var(--acc);font-size:12.5px;margin-left:auto}
+  .wrap{padding:16px 20px 80px;display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:16px;align-items:start}
+  .left,.right{min-width:0}
+  @media (max-width:980px){.wrap{grid-template-columns:minmax(0,1fr)}}
+  .card{background:var(--surf);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+  .card h2{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);font-weight:600}
+  textarea,input,select{font:inherit;color:var(--ink);background:var(--surf);border:1px solid var(--bd);border-radius:8px;padding:7px 9px}
+  textarea:focus,input:focus,select:focus{outline:2px solid var(--acc);border-color:var(--acc)}
+  #src{width:100%;min-height:340px;font-family:ui-monospace,Consolas,monospace;font-size:12px;line-height:1.35;resize:vertical}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-top:10px}
+  .fld{display:flex;flex-direction:column;gap:3px}
+  .fld label{font-size:11px;color:var(--mut);font-weight:600}
+  .fld input[type=text]{min-width:120px}
+  .chk{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--mut);padding:6px 0}
+  button{font:inherit;font-weight:600;cursor:pointer;border:none;border-radius:8px;padding:8px 13px;background:var(--acc);color:#fff}
+  button:hover{background:var(--acc2)}
+  button.ghost{background:transparent;color:var(--mut);border:1px solid var(--bd)}
+  button.ghost:hover{color:var(--ink);border-color:var(--acc)}
+  button:disabled{opacity:.5;cursor:default}
+  .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+  .tabs{display:flex;gap:6px;border-bottom:1px solid var(--bd);margin-bottom:12px}
+  .tab{padding:8px 14px;cursor:pointer;border:1px solid transparent;border-bottom:none;border-radius:9px 9px 0 0;font-weight:600;color:var(--mut)}
+  .tab.on{background:var(--surf);color:var(--acc);border-color:var(--bd)}
+  .hide{display:none !important}
+  .note{font-size:12px;color:var(--mut);margin-top:6px;line-height:1.4}
+  .chip{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.03em;padding:2px 7px;border-radius:999px;font-family:ui-monospace,monospace;margin-right:4px}
+  .c-warn{background:var(--warn);color:var(--warnf)}.c-bad{background:var(--bad);color:var(--badf)}.c-ok{background:var(--ok);color:var(--okf)}.c-mut{background:var(--surf2);color:var(--mut)}
+  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:9px;font-size:13px;opacity:0;transition:opacity .2s;z-index:50;pointer-events:none}
+  .toast.on{opacity:1}
+
+  /* ---- Cotización cliente (lo que se comparte) ---- */
+  #client{background:#fff;border:1px solid var(--bd);border-radius:10px;padding:22px 24px;max-width:900px}
+  #client .ttl{font-size:18px;font-weight:700;letter-spacing:-.01em;margin:0}
+  #client .spec{color:var(--mut);font-size:13px;margin:4px 0 14px;line-height:1.45}
+  #client table{border-collapse:collapse;font-size:13.5px;min-width:420px}
+  #client th,#client td{padding:7px 12px;border-bottom:1px solid var(--bd);text-align:right;white-space:nowrap}
+  #client th{background:var(--surf2);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);font-weight:600}
+  #client th:first-child,#client td:first-child{text-align:left;font-weight:600}
+  #client td.z{color:#c3ccc6}
+  #client td.tot,#client th.tot{background:#fafbf9;font-weight:600;border-left:1px solid var(--bd)}
+  #client tr.sum td{font-weight:700;background:#f7f9f6;border-top:2px solid var(--bd)}
+  #client tr.ctr td{font-weight:700;color:var(--acc);background:var(--ok)}
+  #client tr.sub td{color:var(--mut);font-weight:500;font-size:12.5px}
+  #client .foot{margin-top:14px;font-size:12px;color:var(--mut);line-height:1.5;white-space:pre-wrap}
+  #client .empty{color:var(--faint);padding:20px 0}
+  .tscroll{overflow-x:auto}
+
+  /* ---- Interno ---- */
+  table.int{border-collapse:collapse;width:100%;font-size:13px}
+  table.int th{background:var(--surf2);text-align:left;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);font-weight:600;padding:8px 10px;white-space:nowrap;border-bottom:1px solid var(--bd)}
+  table.int td{padding:7px 10px;border-bottom:1px solid var(--bd);vertical-align:top}
+  table.int td.r,table.int th.r{text-align:right}
+  table.int td.px{white-space:nowrap}
+  table.int td.av{min-width:260px}
+  table.int tr.off td{opacity:.45}
+  .raw{font-family:ui-monospace,monospace;font-size:11px;color:var(--mut);white-space:pre-wrap;max-width:360px}
+  .wl{margin:0;padding-left:16px;font-size:12px}
+  .wl li{margin:2px 0}
+  pre.txt{background:var(--surf2);border:1px solid var(--bd);border-radius:8px;padding:10px 12px;font-size:12px;white-space:pre-wrap;word-break:break-word;max-height:360px;overflow:auto}
+
+  @media print{
+    body{background:#fff}
+    header,.left,.tabs,.bar,.card:not(#client-card),.toast,#view-int{display:none !important}
+    .wrap{display:block;padding:0}
+    #client{border:none;padding:0;max-width:none}
+    #client-card{border:none;padding:0;margin:0}
+  }
+</style></head>
+<body>
+<header>
+  <h1>Ofertas Builders Grade — Matriz de proveedores</h1>
+  <div class="sub">Pega las ofertas de WhatsApp (Mc One) → matriz anónima espesor × proveedor, ctrs completos por proveedor.</div>
+  <a href="index.html">← Compras NetSuite</a>
+</header>
+
+<div class="wrap">
+  <div class="left">
+    <div class="card">
+      <h2>1 · Ofertas recibidas (texto WhatsApp)</h2>
+      <textarea id="src" placeholder="Pega aquí los mensajes tal cual llegan por WhatsApp. Cada oferta debe empezar con una línea «Supplier: …». Se aceptan líneas «12 bundles 15mm», «12bundles 12mm», «01 bundles 09mm», y precios «FOB - 12mm - USD 230/cbm»."></textarea>
+      <div class="bar" style="margin-top:8px">
+        <button class="ghost" id="demo">Cargar ejemplo</button>
+        <button class="ghost" id="clear">Limpiar</button>
+        <span class="note" id="pcount" style="margin:0"></span>
+      </div>
+      <div class="note">El texto es la fuente de verdad: si una oferta no trae desglose de paquetes, agrega una línea como <span class="num">20 bundles 18mm</span> dentro de esa oferta y la matriz se actualiza sola. Para excluir una oferta, desmárcala en la pestaña Interno.</div>
+    </div>
+
+    <div class="card">
+      <h2>2 · Parámetros de la cotización</h2>
+      <div class="row">
+        <div class="fld" style="flex:1;min-width:220px"><label>Título</label><input type="text" id="p-title" value="Triplay Pino Builders Grade (BG Falldown) 1220 × 2440 mm"></div>
+      </div>
+      <div class="row">
+        <div class="fld" style="flex:1;min-width:220px"><label>Especificación</label><input type="text" id="p-spec" value="Cara y contracara pino · alma pino · pegamento WBP"></div>
+      </div>
+      <div class="row">
+        <div class="fld"><label>Incoterm / puerto</label><input type="text" id="p-terms" value="FOB Paranaguá (PNG), Brasil"></div>
+        <div class="fld"><label>Fecha</label><input type="text" id="p-date" style="width:110px"></div>
+        <div class="fld"><label>Paq. / ctr</label><input type="number" id="p-bpc" value="20" min="1" style="width:70px"></div>
+      </div>
+      <div class="row">
+        <div class="fld" style="flex:1;min-width:220px"><label>Nota al pie</label><input type="text" id="p-note" value="Listo para embarque. Los paquetes de un proveedor no se combinan con otro en el mismo contenedor. Sujeto a confirmación al momento de la orden."></div>
+      </div>
+      <div class="row" style="gap:16px">
+        <label class="chk"><input type="checkbox" id="o-price"> Mostrar precio por proveedor</label>
+        <label class="chk"><input type="checkbox" id="o-total" checked> Columna total por espesor</label>
+        <label class="chk"><input type="checkbox" id="o-loose" checked> Fila paquetes sueltos</label>
+      </div>
+      <div class="row">
+        <div class="fld"><label>Orden de proveedores</label><select id="o-sort"><option value="paste">Orden de recepción</option><option value="ctrs">Más ctrs completos primero</option><option value="bundles">Más paquetes primero</option></select></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="tabs">
+      <div class="tab on" id="tab-cli">Cotización (cliente)</div>
+      <div class="tab" id="tab-int">Interno (proveedores reales)</div>
+    </div>
+
+    <div id="view-cli">
+      <div class="bar">
+        <button id="b-wa">Copiar texto WhatsApp</button>
+        <button class="ghost" id="b-xls">Copiar para Excel</button>
+        <button class="ghost" id="b-png">Descargar imagen PNG</button>
+        <button class="ghost" id="b-print">Imprimir / PDF</button>
+      </div>
+      <div class="card" id="client-card" style="padding:0;border:none;background:transparent">
+        <div id="client"></div>
+      </div>
+      <div class="card">
+        <h2>Vista previa del texto WhatsApp</h2>
+        <pre class="txt" id="wa-prev"></pre>
+      </div>
+    </div>
+
+    <div id="view-int" class="hide">
+      <div class="card">
+        <h2>Mapa Prov. # → proveedor real (no compartir)</h2>
+        <div class="tscroll"><table class="int"><thead><tr>
+          <th></th><th>#</th><th>Proveedor</th><th>Desglose detectado</th><th class="r">Paq.</th><th class="r">Ctrs compl.</th><th class="r">Sueltos</th><th class="r">Declara</th><th>Precio</th><th>Avisos</th>
+        </tr></thead><tbody id="int-rows"></tbody></table></div>
+        <div class="note">«Ctrs compl.» = ⌊paquetes ÷ paq./ctr⌋. Si difiere de lo que declara el proveedor, aparece aviso: Mc One suele cargar 19 o 20 por ctr, o el proveedor ofrece más stock del que cabe en el volumen declarado.</div>
+      </div>
+      <div class="card">
+        <h2>Texto sin interpretar</h2>
+        <div class="note" id="unparsed">—</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id);};
+var LS="bgq_v1";
+var EXCL={}; // supplier name (lower) -> true
+var OFFERS=[];
+
+function esc(s){s=(s==null?"":""+s);return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function toast(m){var t=$("toast");t.textContent=m;t.classList.add("on");setTimeout(function(){t.classList.remove("on");},1800);}
+function fmtThk(t){return (Math.round(t*10)/10).toString().replace(/\.0$/,"")+"mm";}
+function pad(s,n,left){s=""+s;while(s.length<n)s=left?s+" ":" "+s;return s;}
+
+/* ---------------- Parser ---------------- */
+var RX_HEAD=/^(?:supplier|proveedor|fornecedor|fabrica|fábrica)\s*:/i;
+var UNIT="(?:bundles?|bdls?|bundels?|pallets?|pacotes?|paquetes?|pkgs?|packs?|fardos?|paq\\.?|bultos?)";
+var RX_B1=new RegExp("^(\\d+)(?:\\s*"+UNIT+"|\\s*[-–:x×]|\\s+)\\s*[-–:x×]?\\s*(?:de\\s+|of\\s+)?(\\d+(?:[.,]\\d+)?)\\s*mm\\b(.*)$","i");
+var RX_B2=new RegExp("^(\\d+(?:[.,]\\d+)?)\\s*mm\\b\\s*[-–:x×]?\\s*(\\d+)\\s*"+UNIT,"i");
+var RX_CTR=/(\d+)\s*(?:x\s*)?(?:cntrs?|ctrs?|containers?|contenedores?|contêineres?|conteineres?|cont\b|fcl|hc\b)/i;
+
+function stripWa(l){
+  // "[11:22 AM, 9/8/2026] Alberto Caputi: Supplier: X"  -> "Supplier: X"
+  var m=l.match(/^\[[^\]]{4,40}\]\s*[^:]{1,60}?:\s*(.*)$/);
+  if(m)return m[1];
+  m=l.match(/^\d{1,2}\/\d{1,2}\/\d{2,4},?\s+\d{1,2}:\d{2}(?:\s*[ap]\.?m\.?)?\s*-\s*[^:]{1,60}?:\s*(.*)$/i);
+  if(m)return m[1];
+  return l;
+}
+function splitBlocks(text){
+  var lines=(text||"").replace(/\r/g,"").split("\n"),blocks=[],cur=null,orphan=[];
+  lines.forEach(function(raw){
+    var l=stripWa(raw).trim();
+    if(!l)return;
+    if(RX_HEAD.test(l)){cur={lines:[]};blocks.push(cur);}
+    if(cur)cur.lines.push(l);else orphan.push(l);
+  });
+  return {blocks:blocks,orphan:orphan};
+}
+function parsePrice(o,l){
+  var s=l.replace(/^(?:price|preço|preco|precio|prices|preços|precios)\s*:\s*/i,"").trim();
+  var m,thk=null,usd=null,cond="";
+  if((m=s.match(/(\d+(?:[.,]\d+)?)\s*mm\b/i)))thk=parseFloat(m[1].replace(",","."));
+  if((m=s.match(/(?:USD|US\$|U\$S?|\$|R\$)\s*([\d]+(?:[.,]\d+)?)/i)))usd=parseFloat(m[1].replace(",","."));
+  else if((m=s.match(/([\d]+(?:[.,]\d+)?)\s*(?:USD|usd|\/\s*(?:cbm|m3|m³))/)))usd=parseFloat(m[1].replace(",","."));
+  if((m=s.match(RX_CTR))){cond=m[1]+" ctr";if(/ou\s+mais|or\s+more|o\s+m[aá]s|\+|e\s+acima|en\s+adelante|and\s+up/i.test(s.slice(m.index+m[0].length)))cond+="+";}
+  var basis=(s.match(/\b(FOB|CFR|CIF|FCA|EXW|DAP|CNF)\b/i)||[])[1];
+  var unit=(s.match(/\/\s*(cbm|m3|m³|pc|pcs|sheet|hoja|chapa)/i)||[])[1];
+  o.prices.push({thk:thk,usd:usd,cond:cond,basis:basis?basis.toUpperCase():"",unit:unit?unit.toLowerCase():"",text:s});
+}
+function parseBlock(lines){
+  var o={supplier:"",product:"",cntrs:null,perCtr:"",totalDecl:null,shipment:"",pol:"",prices:[],lines:[],warnings:[],other:[],raw:lines.join("\n")};
+  lines.forEach(function(l){
+    var m;
+    if((m=l.match(/^(?:supplier|proveedor|fornecedor|fabrica|fábrica)\s*:\s*(.*)$/i))){o.supplier=m[1].trim();return;}
+    if((m=l.match(/^(?:product|produto|producto|item)\s*:\s*(.*)$/i))){o.product=m[1].trim();return;}
+    if((m=l.match(/^(?:volume|volumen|qty|quantity|cantidad|quantidade)\s*:\s*(.*)$/i))){
+      var v=m[1];o.volumeText=v;
+      var c=v.match(RX_CTR);if(c)o.cntrs=+c[1];
+      var pc=v.match(new RegExp("(\\d+)\\s*(?:or|ou|o|-|–|\\/|a)\\s*(\\d+)\\s*"+UNIT+"\\s*(?:\\/|per|por)\\s*(?:cntr|ctr|cont)","i"));
+      if(pc)o.perCtr=pc[1]+"–"+pc[2];
+      if(!c){var tb=v.match(new RegExp("(\\d+)\\s*"+UNIT,"i"));if(tb)o.totalDecl=+tb[1];}
+      return;
+    }
+    if((m=l.match(/^(?:shipment|embarque|shipping|entrega|delivery|disponibilidad|prazo)\s*:\s*(.*)$/i))){o.shipment=m[1].trim();return;}
+    if((m=l.match(/^(?:pol|port|porto|puerto|origin|origem)\s*:\s*(.*)$/i))){o.pol=m[1].trim();return;}
+    if(/^(?:price|preço|preco|precio|prices|preços|precios)\s*:/i.test(l)||(/(?:USD|US\$|U\$|\$)\s*\d/i.test(l)&&/(cbm|m3|m³)/i.test(l))){parsePrice(o,l);return;}
+    if((m=l.match(RX_B2))){o.lines.push({bundles:+m[2],thk:parseFloat(m[1].replace(",","."))});return;}
+    if((m=l.match(RX_B1))){o.lines.push({bundles:+m[1],thk:parseFloat(m[2].replace(",","."))});return;}
+    o.other.push(l);
+  });
+  return o;
+}
+function finish(o,bpc){
+  // merge duplicate thicknesses
+  var by={};o.lines.forEach(function(x){by[x.thk]=(by[x.thk]||0)+x.bundles;});
+  o.lines=Object.keys(by).map(function(k){return {thk:+k,bundles:by[k]};}).sort(function(a,b){return a.thk-b.thk;});
+  o.estimated=false;
+  if(!o.lines.length){
+    var thks=[];o.prices.forEach(function(p){if(p.thk!=null&&thks.indexOf(p.thk)<0)thks.push(p.thk);});
+    var qty=o.cntrs!=null?o.cntrs*bpc:(o.totalDecl!=null?o.totalDecl:null);
+    if(thks.length===1&&qty!=null){
+      o.lines=[{thk:thks[0],bundles:qty}];o.estimated=true;
+      o.warnings.push("Sin desglose de paquetes: se asumen "+(o.cntrs!=null?o.cntrs+" ctr × "+bpc:qty)+" = "+qty+" paq. de "+fmtThk(thks[0])+". Verificar con Mc One (declara "+(o.perCtr||"19–20")+" paq./ctr).");
+    }else if(thks.length>1&&qty!=null){
+      o.warnings.push("Varios espesores ("+thks.map(fmtThk).join(", ")+") sin desglose de paquetes. Agrega líneas «N bundles XXmm» en el texto.");
+    }else{
+      o.warnings.push("No se detectó espesor ni paquetes. Agrega líneas «N bundles XXmm» en el texto.");
+    }
+  }
+  o.total=o.lines.reduce(function(s,x){return s+x.bundles;},0);
+  o.fullCtrs=Math.floor(o.total/bpc);
+  o.loose=o.total-o.fullCtrs*bpc;
+  if(o.totalDecl!=null&&!o.estimated&&o.lines.length&&o.totalDecl!==o.total)o.warnings.push("Declara "+o.totalDecl+" paq. pero el desglose suma "+o.total+".");
+  if(o.cntrs!=null&&!o.estimated&&o.lines.length&&o.fullCtrs!==o.cntrs){
+    o.warnings.push("Declara "+o.cntrs+" ctr pero con "+bpc+" paq./ctr salen "+o.fullCtrs+" completo"+(o.fullCtrs===1?"":"s")+(o.loose?" + "+o.loose+" sueltos":"")+" ("+o.total+" paq.).");
+  }
+  if(!o.prices.length)o.warnings.push("Sin precio detectado.");
+  if(o.other.length)o.warnings.push("Líneas no interpretadas: "+o.other.join(" | "));
+  return o;
+}
+function parseAll(text,bpc){
+  var sp=splitBlocks(text);
+  var offers=sp.blocks.map(function(b){return finish(parseBlock(b.lines),bpc);});
+  return {offers:offers,orphan:sp.orphan};
+}
+
+/* ---------------- Modelo de cotización ---------------- */
+function priceLabel(o,short){
+  if(!o.prices.length)return "";
+  var valid=o.prices.filter(function(p){return p.usd!=null;});
+  if(!valid.length)return o.prices[0].text;
+  var allSame=valid.every(function(p){return p.usd===valid[0].usd;});
+  var pre=short?"":((valid[0].basis||"")+" ").replace(/^ $/,"");
+  if(allSame&&!valid.some(function(p){return p.cond;}))return pre+"USD "+valid[0].usd;
+  return pre+valid.map(function(p){var s="USD "+p.usd;var q=[];if(p.thk!=null&&valid.length>1&&valid.some(function(x){return x.thk!==p.thk;}))q.push(fmtThk(p.thk));if(p.cond)q.push(p.cond);return s+(q.length?" ("+q.join(", ")+")":"");}).join(" · ");
+}
+function priceRange(offers){
+  var v=[];offers.forEach(function(o){o.prices.forEach(function(p){if(p.usd!=null)v.push(p.usd);});});
+  if(!v.length)return "";
+  var mn=Math.min.apply(null,v),mx=Math.max.apply(null,v);
+  var unit=(offers[0].prices[0]&&offers[0].prices[0].unit)||"m³";if(unit==="cbm"||unit==="m3")unit="m³";
+  return mn===mx?"USD "+mn+"/"+unit:"USD "+mn+"–"+mx+"/"+unit;
+}
+function model(){
+  var bpc=Math.max(1,parseInt($("p-bpc").value,10)||20);
+  var res=parseAll($("src").value,bpc);
+  OFFERS=res.offers;
+  var active=OFFERS.filter(function(o){return !EXCL[o.supplier.toLowerCase()]&&o.lines.length;});
+  var sort=$("o-sort").value;
+  if(sort==="ctrs")active.sort(function(a,b){return b.fullCtrs-a.fullCtrs||b.total-a.total;});
+  else if(sort==="bundles")active.sort(function(a,b){return b.total-a.total;});
+  active.forEach(function(o,i){o.n=i+1;});
+  var thks=[];active.forEach(function(o){o.lines.forEach(function(l){if(thks.indexOf(l.thk)<0)thks.push(l.thk);});});
+  thks.sort(function(a,b){return a-b;});
+  var cell={};active.forEach(function(o){o.lines.forEach(function(l){cell[o.n+"|"+l.thk]=l.bundles;});});
+  return {bpc:bpc,offers:active,all:OFFERS,orphan:res.orphan,thks:thks,cell:cell,
+    title:$("p-title").value.trim(),spec:$("p-spec").value.trim(),terms:$("p-terms").value.trim(),date:$("p-date").value.trim(),note:$("p-note").value.trim(),
+    showPrice:$("o-price").checked,showTotal:$("o-total").checked,showLoose:$("o-loose").checked};
+}
+
+/* ---------------- Render cliente ---------------- */
+function renderClient(M){
+  var el=$("client");
+  var h='<p class="ttl">'+esc(M.title)+'</p><div class="spec">'+esc(M.spec)+(M.spec&&M.terms?" · ":"")+esc(M.terms)+(M.date?' · '+esc(M.date):'')+'</div>';
+  if(!M.offers.length){el.innerHTML=h+'<div class="empty">Pega ofertas a la izquierda para armar la matriz.</div>';return;}
+  h+='<div class="tscroll"><table><thead><tr><th>Espesor</th>';
+  M.offers.forEach(function(o){h+='<th>Prov. #'+o.n+'</th>';});
+  if(M.showTotal)h+='<th class="tot">Total</th>';
+  h+='</tr></thead><tbody>';
+  M.thks.forEach(function(t){
+    var tot=0;h+='<tr><td>'+fmtThk(t)+'</td>';
+    M.offers.forEach(function(o){var v=M.cell[o.n+"|"+t];tot+=v||0;h+=v?'<td class="num">'+v+'</td>':'<td class="z">–</td>';});
+    if(M.showTotal)h+='<td class="tot num">'+tot+'</td>';
+    h+='</tr>';
+  });
+  var gt=0,gc=0,gl=0;
+  h+='<tr class="sum"><td>Total paquetes</td>';M.offers.forEach(function(o){gt+=o.total;h+='<td class="num">'+o.total+'</td>';});if(M.showTotal)h+='<td class="tot num">'+gt+'</td>';h+='</tr>';
+  h+='<tr class="ctr"><td>Ctrs completos ('+M.bpc+' paq.)</td>';M.offers.forEach(function(o){gc+=o.fullCtrs;h+='<td class="num">'+o.fullCtrs+'</td>';});if(M.showTotal)h+='<td class="tot num">'+gc+'</td>';h+='</tr>';
+  if(M.showLoose){h+='<tr class="sub"><td>Paquetes sueltos</td>';M.offers.forEach(function(o){gl+=o.loose;h+=o.loose?'<td class="num">'+o.loose+'</td>':'<td class="z">–</td>';});if(M.showTotal)h+='<td class="tot num">'+gl+'</td>';h+='</tr>';}
+  if(M.showPrice){h+='<tr class="sub"><td>Precio '+esc((M.offers[0].prices[0]||{}).basis||"")+' USD/m³</td>';M.offers.forEach(function(o){h+='<td>'+esc(priceLabel(o,true).replace(/USD /g,""))+'</td>';});if(M.showTotal)h+='<td class="tot"></td>';h+='</tr>';}
+  h+='</tbody></table></div>';
+  var foot=[];
+  if(!M.showPrice){var pr=priceRange(M.offers);if(pr)foot.push("Precio "+((M.offers[0].prices[0]||{}).basis||"")+" "+pr+" según proveedor y volumen.");}
+  foot.push("Paquetes de 1220 × 2440 mm. "+M.bpc+" paquetes por contenedor.");
+  if(M.note)foot.push(M.note);
+  h+='<div class="foot">'+esc(foot.join("\n"))+'</div>';
+  el.innerHTML=h;
+}
+
+/* ---------------- Texto WhatsApp / TSV ---------------- */
+function waText(M){
+  if(!M.offers.length)return "";
+  var out=[];
+  out.push("*"+M.title+"*");
+  out.push([M.spec,M.terms,M.date].filter(Boolean).join(" · "));
+  out.push("");
+  var w0=Math.max(5,Math.max.apply(null,M.thks.map(function(t){return fmtThk(t).length;})));
+  var cols=M.offers.map(function(o){return Math.max(3,("P"+o.n).length,(""+o.total).length);});
+  var wt=Math.max(5,(""+M.offers.reduce(function(s,o){return s+o.total;},0)).length);
+  var line=function(label,vals,tot){var s=pad(label,w0,true);vals.forEach(function(v,i){s+=" "+pad(v,cols[i]);});if(M.showTotal)s+="  "+pad(tot,wt);return s;};
+  var t=["```"];
+  t.push(line("Esp.",M.offers.map(function(o){return "P"+o.n;}),"Total"));
+  M.thks.forEach(function(th){var tot=0;t.push(line(fmtThk(th),M.offers.map(function(o){var v=M.cell[o.n+"|"+th];tot+=v||0;return v?v:"-";}),tot));});
+  t.push(pad("",w0+cols.reduce(function(s,c){return s+c+1;},0)+(M.showTotal?wt+2:0),true).replace(/ /g,"-"));
+  t.push(line("Paq.",M.offers.map(function(o){return o.total;}),M.offers.reduce(function(s,o){return s+o.total;},0)));
+  t.push(line("Ctrs",M.offers.map(function(o){return o.fullCtrs;}),M.offers.reduce(function(s,o){return s+o.fullCtrs;},0)));
+  if(M.showLoose)t.push(line("Sobr.",M.offers.map(function(o){return o.loose||"-";}),M.offers.reduce(function(s,o){return s+o.loose;},0)));
+  t.push("```");
+  out.push(t.join("\n"));
+  out.push("");
+  out.push("*Por proveedor* (P# = Prov. #, "+M.bpc+" paq./ctr):");
+  M.offers.forEach(function(o){
+    var mix=o.lines.map(function(l){return l.bundles+" paq. "+fmtThk(l.thk);}).join(", ");
+    var c=o.fullCtrs+" ctr"+(o.fullCtrs===1?"":"s")+" completo"+(o.fullCtrs===1?"":"s")+(o.loose?" + "+o.loose+" paq. sueltos":"");
+    out.push("• Prov. #"+o.n+": "+c+" → "+mix+(M.showPrice&&o.prices.length?" · "+priceLabel(o,false):""));
+  });
+  var foot=[];
+  if(!M.showPrice){var pr=priceRange(M.offers);if(pr)foot.push("Precio "+((M.offers[0].prices[0]||{}).basis||"")+" "+pr+" según proveedor y volumen.");}
+  if(M.note)foot.push(M.note);
+  if(foot.length){out.push("");out.push("_"+foot.join(" ")+"_");}
+  return out.join("\n");
+}
+function tsv(M){
+  if(!M.offers.length)return "";
+  var r=[];
+  var head=["Espesor"].concat(M.offers.map(function(o){return "Prov. #"+o.n;}));if(M.showTotal)head.push("Total");r.push(head);
+  M.thks.forEach(function(t){var tot=0,row=[fmtThk(t)];M.offers.forEach(function(o){var v=M.cell[o.n+"|"+t]||0;tot+=v;row.push(v||"");});if(M.showTotal)row.push(tot);r.push(row);});
+  var a=["Total paquetes"],b=["Ctrs completos ("+M.bpc+" paq.)"],c=["Paquetes sueltos"],d=["Precio USD/m³"],gt=0,gc=0,gl=0;
+  M.offers.forEach(function(o){a.push(o.total);b.push(o.fullCtrs);c.push(o.loose||"");d.push(priceLabel(o,true).replace(/USD /g,""));gt+=o.total;gc+=o.fullCtrs;gl+=o.loose;});
+  if(M.showTotal){a.push(gt);b.push(gc);c.push(gl);d.push("");}
+  r.push(a);r.push(b);if(M.showLoose)r.push(c);if(M.showPrice)r.push(d);
+  r.push([]);r.push([M.title]);r.push([[M.spec,M.terms,M.date].filter(Boolean).join(" · ")]);if(M.note)r.push([M.note]);
+  return r.map(function(x){return x.join("\t");}).join("\n");
+}
+
+/* ---------------- Render interno ---------------- */
+function renderInternal(M){
+  var rows=M.all.map(function(o){
+    var key=o.supplier.toLowerCase(),off=!!EXCL[key];
+    var mix=o.lines.map(function(l){return '<span class="num">'+l.bundles+'</span> × '+fmtThk(l.thk);}).join("<br>")||'<span class="chip c-bad">sin desglose</span>';
+    var w=o.warnings.map(function(x){var cls=/^Declara|^Sin desglose/.test(x)?"c-warn":(/^No se detectó|^Varios|^Sin precio/.test(x)?"c-bad":"c-mut");return '<li><span class="chip '+cls+'">!</span>'+esc(x)+'</li>';}).join("");
+    var decl=o.cntrs!=null?o.cntrs+" ctr":(o.totalDecl!=null?o.totalDecl+" paq.":"—");
+    return '<tr class="'+(off?"off":"")+'">'+
+      '<td><input type="checkbox" class="ex" data-k="'+esc(key)+'" '+(off?"":"checked")+'></td>'+
+      '<td class="num">'+(o.n?"#"+o.n:"—")+'</td>'+
+      '<td><b>'+esc(o.supplier||"(sin nombre)")+'</b><div class="note" style="margin-top:2px">'+esc(o.pol?"POL "+o.pol:"")+(o.shipment?" · "+esc(o.shipment):"")+(o.perCtr?" · "+esc(o.perCtr)+" paq./ctr":"")+'</div><details><summary class="note" style="cursor:pointer">texto original</summary><div class="raw">'+esc(o.raw)+'</div></details></td>'+
+      '<td>'+mix+(o.estimated?' <span class="chip c-warn">estimado</span>':'')+'</td>'+
+      '<td class="r num">'+o.total+'</td><td class="r num"><b>'+o.fullCtrs+'</b></td><td class="r num">'+(o.loose||"–")+'</td><td class="r num">'+decl+'</td>'+
+      '<td class="px">'+esc(priceLabel(o,false))+'</td>'+
+      '<td class="av">'+(w?'<ul class="wl">'+w+'</ul>':'<span class="chip c-ok">ok</span>')+'</td></tr>';
+  }).join("");
+  $("int-rows").innerHTML=rows||'<tr><td colspan="10" class="note">Sin ofertas.</td></tr>';
+  Array.prototype.forEach.call(document.querySelectorAll(".ex"),function(cb){cb.addEventListener("change",function(){var k=cb.getAttribute("data-k");if(cb.checked)delete EXCL[k];else EXCL[k]=true;update();});});
+  $("unparsed").innerHTML=M.orphan.length?'<div class="raw">'+esc(M.orphan.join("\n"))+'</div>':'— (todo el texto quedó dentro de alguna oferta)';
+}
+
+/* ---------------- Ciclo ---------------- */
+var lastM=null;
+function update(){
+  var M=model();lastM=M;
+  renderClient(M);renderInternal(M);
+  $("wa-prev").textContent=waText(M);
+  var n=M.all.length,a=M.offers.length;
+  $("pcount").textContent=n?(n+" oferta"+(n===1?"":"s")+" detectada"+(n===1?"":"s")+(a!==n?" · "+a+" en la matriz":"")):"";
+  save();
+}
+function save(){try{localStorage.setItem(LS,JSON.stringify({src:$("src").value,title:$("p-title").value,spec:$("p-spec").value,terms:$("p-terms").value,date:$("p-date").value,note:$("p-note").value,bpc:$("p-bpc").value,price:$("o-price").checked,total:$("o-total").checked,loose:$("o-loose").checked,sort:$("o-sort").value,excl:EXCL}));}catch(e){}}
+function restore(){
+  try{var s=JSON.parse(localStorage.getItem(LS)||"null");if(!s)return false;
+    $("src").value=s.src||"";if(s.title)$("p-title").value=s.title;if(s.spec)$("p-spec").value=s.spec;if(s.terms)$("p-terms").value=s.terms;if(s.date)$("p-date").value=s.date;if(s.note!=null)$("p-note").value=s.note;if(s.bpc)$("p-bpc").value=s.bpc;
+    $("o-price").checked=!!s.price;$("o-total").checked=s.total!==false;$("o-loose").checked=s.loose!==false;if(s.sort)$("o-sort").value=s.sort;EXCL=s.excl||{};return true;
+  }catch(e){return false;}
+}
+function copy(text,msg){
+  if(!text){toast("Nada que copiar");return;}
+  var done=function(){toast(msg||"Copiado");};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done,function(){fallback();});}else fallback();
+  function fallback(){var ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done();}catch(e){toast("No se pudo copiar");}document.body.removeChild(ta);}
+}
+function today(){var d=new Date();return pad(d.getDate(),2).replace(/ /g,"0")+"/"+pad(d.getMonth()+1,2).replace(/ /g,"0")+"/"+d.getFullYear();}
+
+var DEMO=[
+"Supplier: Madeireira Rio Claro","Product: 1220X2440 BG Falldown - Pine face and back & Pine Core - WBP glue","Volume: 1 cntr (19 or 20 pallets/cntr)","Shipment: ready to go","POL: PNG","Price: 18mm - FOB - USD 235/cbm","",
+"[11:22 AM, 9/8/2026] Alberto Caputi: Supplier: Itamarati","Product:  1220X2440 BG Falldown - Pine face and back & Pine Core - WBP glue","Volume: 5 cntrs  (19 or 20 Bundles/cntr)","Shipment: Ready to go","POL: PNG","Price: FOB - 12mm - USD 230/cbm - 1 cntr","Price: FOB - 12mm - USD 225/cbm - 2 cntrs ou mais",
+"[11:22 AM, 9/8/2026] Alberto Caputi: Supplier: Parmacenter","Product:  1220X2440 BG Falldown - Pine face and back & Pine Core - WBP glue","Volume: 1 cntr  (19 or 20 Bundles/cntr)","12bundles 12mm","04bundles 15mm ","07bundles 23mm","Shipment: ready to go","POL: PNG","Price: FOB - USD 230/cbm",
+"[11:22 AM, 9/8/2026] Alberto Caputi: Supplier: MGS - Guaranile","Product:  1220X2440 BG Falldown - Pine face and back & Pine Core - WBP glue","Volume: 1 cntr  (19 or 20 Bundles/cntr)","01 bundles 09mm","08 bundles 15mm","09 bundles 18mm","17 bundles 20mm","Shipment: ready to go","POL: PNG","Price: FOB - USD 230/cbm","",
+"Supplier: Randa","Product: 1220X2440 BG Falldown - Pine face and back & Pine Core - WBP glue","Volume: 2 cntrs  (19 or 20 Bundles/cntr)","07 bundles 09mm","29 bundles 12mm","Shipment: ready to go","POL: PNG","Price: FOB - USD 230/cbm"].join("\n");
+
+/* ---------------- Eventos ---------------- */
+["src","p-title","p-spec","p-terms","p-date","p-note","p-bpc"].forEach(function(id){$(id).addEventListener("input",update);});
+["o-price","o-total","o-loose","o-sort"].forEach(function(id){$(id).addEventListener("change",update);});
+$("demo").addEventListener("click",function(){$("src").value=DEMO;EXCL={};update();});
+$("clear").addEventListener("click",function(){$("src").value="";EXCL={};update();});
+$("b-wa").addEventListener("click",function(){copy(waText(lastM),"Texto WhatsApp copiado");});
+$("b-xls").addEventListener("click",function(){copy(tsv(lastM),"Tabla copiada (pegar en Excel)");});
+$("b-print").addEventListener("click",function(){window.print();});
+function drawPng(M){
+  var S=2,padX=28,padY=24,rowH=34,hdrH=36,c0=Math.max(150,M.showPrice?200:150),W,H;
+  var cols=M.offers.length+(M.showTotal?1:0);
+  var cv=document.createElement("canvas"),ctx=cv.getContext("2d");
+  var cws=[];for(var ci=0;ci<cols;ci++)cws.push(92);
+  if(M.showPrice){ctx.font="12.5px system-ui, sans-serif";M.offers.forEach(function(o,i){var t=priceLabel(o,true).replace(/USD /g,"");cws[i]=Math.max(cws[i],Math.ceil(ctx.measureText(t).width)+24);});}
+  var colOff=[0];cws.forEach(function(w,i){colOff.push(colOff[i]+w);});
+  var tableW=c0+colOff[cols];
+  var footLines=[];
+  if(!M.showPrice){var pr=priceRange(M.offers);if(pr)footLines.push("Precio "+((M.offers[0].prices[0]||{}).basis||"")+" "+pr+" según proveedor y volumen.");}
+  footLines.push("Paquetes de 1220 × 2440 mm. "+M.bpc+" paquetes por contenedor.");
+  if(M.note)footLines.push(M.note);
+  var wrap=function(text,font,maxW){ctx.font=font;var out=[];text.split("\n").forEach(function(par){var words=par.split(" "),cur="";words.forEach(function(w){var t=cur?cur+" "+w:w;if(ctx.measureText(t).width>maxW&&cur){out.push(cur);cur=w;}else cur=t;});out.push(cur);});return out;};
+  var subLine=[M.spec,M.terms,M.date].filter(Boolean).join(" · ");
+  W=Math.max(tableW+padX*2,720);
+  var titleLines=wrap(M.title,"bold 20px system-ui, sans-serif",W-padX*2);
+  var subLines=wrap(subLine,"13px system-ui, sans-serif",W-padX*2);
+  var fLines=wrap(footLines.join("\n"),"12px system-ui, sans-serif",W-padX*2);
+  var nRows=M.thks.length+2+(M.showLoose?1:0)+(M.showPrice?1:0);
+  H=padY+titleLines.length*26+subLines.length*18+14+hdrH+nRows*rowH+16+fLines.length*17+padY;
+  cv.width=W*S;cv.height=H*S;ctx.scale(S,S);
+  ctx.fillStyle="#ffffff";ctx.fillRect(0,0,W,H);
+  var y=padY;ctx.textBaseline="top";ctx.fillStyle="#17201b";ctx.font="bold 20px system-ui, sans-serif";
+  titleLines.forEach(function(l){ctx.fillText(l,padX,y);y+=26;});
+  ctx.fillStyle="#5d6b62";ctx.font="13px system-ui, sans-serif";subLines.forEach(function(l){ctx.fillText(l,padX,y);y+=18;});
+  y+=14;
+  var x0=padX,colX=function(i){return x0+c0+colOff[i];},cwOf=function(i){return cws[i];};
+  // header
+  ctx.fillStyle="#eef1ec";ctx.fillRect(x0,y,tableW,hdrH);
+  ctx.fillStyle="#5d6b62";ctx.font="bold 11px system-ui, sans-serif";ctx.textAlign="left";ctx.fillText("ESPESOR",x0+12,y+12);
+  ctx.textAlign="right";M.offers.forEach(function(o,i){ctx.fillText("PROV. #"+o.n,colX(i)+cwOf(i)-12,y+12);});
+  if(M.showTotal)ctx.fillText("TOTAL",colX(M.offers.length)+cwOf(M.offers.length)-12,y+12);
+  y+=hdrH;
+  var mono="15px ui-monospace, Consolas, monospace";
+  var row=function(label,vals,tot,style){
+    if(style==="sum"){ctx.fillStyle="#f7f9f6";ctx.fillRect(x0,y,tableW,rowH);}
+    if(style==="ctr"){ctx.fillStyle="#e6f1ea";ctx.fillRect(x0,y,tableW,rowH);}
+    if(M.showTotal){ctx.fillStyle=style==="ctr"?"#dcebe1":"#fafbf9";ctx.fillRect(colX(M.offers.length),y,cwOf(M.offers.length),rowH);}
+    ctx.strokeStyle="#e0e5de";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x0,y+rowH-.5);ctx.lineTo(x0+tableW,y+rowH-.5);ctx.stroke();
+    if(style==="sum"){ctx.strokeStyle="#c9d2cc";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x0,y+1);ctx.lineTo(x0+tableW,y+1);ctx.stroke();}
+    ctx.textAlign="left";ctx.fillStyle=style==="ctr"?"#2e6b4c":(style==="sub"?"#5d6b62":"#17201b");
+    ctx.font=(style==="sub"?"":"bold ")+(style==="sub"?"12.5px":"14px")+" system-ui, sans-serif";ctx.fillText(label,x0+12,y+10);
+    ctx.textAlign="right";
+    vals.forEach(function(v,i){var z=(v===""||v==null||v==="–");ctx.fillStyle=z?"#c3ccc6":(style==="ctr"?"#2e6b4c":(style==="sub"?"#5d6b62":"#17201b"));ctx.font=(style==="sum"||style==="ctr"?"bold ":"")+(style==="price"?"12.5px system-ui, sans-serif":mono);ctx.fillText(z?"–":""+v,colX(i)+cwOf(i)-12,y+9);});
+    if(M.showTotal){ctx.fillStyle=style==="ctr"?"#2e6b4c":"#17201b";ctx.font="bold "+mono;if(tot!==null&&tot!==undefined&&tot!=="")ctx.fillText(""+tot,colX(M.offers.length)+cwOf(M.offers.length)-12,y+9);}
+    y+=rowH;
+  };
+  M.thks.forEach(function(t){var tot=0;row(fmtThk(t),M.offers.map(function(o){var v=M.cell[o.n+"|"+t];tot+=v||0;return v||"";}),tot,"");});
+  row("Total paquetes",M.offers.map(function(o){return o.total;}),M.offers.reduce(function(s,o){return s+o.total;},0),"sum");
+  row("Ctrs completos ("+M.bpc+" paq.)",M.offers.map(function(o){return o.fullCtrs;}),M.offers.reduce(function(s,o){return s+o.fullCtrs;},0),"ctr");
+  if(M.showLoose)row("Paquetes sueltos",M.offers.map(function(o){return o.loose||"";}),M.offers.reduce(function(s,o){return s+o.loose;},0),"sub");
+  if(M.showPrice)row("Precio "+((M.offers[0].prices[0]||{}).basis||"")+" USD/m³",M.offers.map(function(o){return priceLabel(o,true).replace(/USD /g,"");}),"","price");
+  y+=16;ctx.textAlign="left";ctx.fillStyle="#5d6b62";ctx.font="12px system-ui, sans-serif";fLines.forEach(function(l){ctx.fillText(l,padX,y);y+=17;});
+  return cv;
+}
+$("b-png").addEventListener("click",function(){
+  if(!lastM||!lastM.offers.length){toast("Nada que exportar");return;}
+  try{
+    var cv=drawPng(lastM);
+    var a=document.createElement("a");a.download="cotizacion-bg-"+(lastM.date||today()).replace(/\//g,"-")+".png";a.href=cv.toDataURL("image/png");document.body.appendChild(a);a.click();document.body.removeChild(a);
+    toast("Imagen descargada");
+  }catch(e){toast("Error al generar imagen: "+e.message);}
+});
+function showTab(t){$("tab-cli").classList.toggle("on",t==="cli");$("tab-int").classList.toggle("on",t==="int");$("view-cli").classList.toggle("hide",t!=="cli");$("view-int").classList.toggle("hide",t!=="int");}
+$("tab-cli").addEventListener("click",function(){showTab("cli");});
+$("tab-int").addEventListener("click",function(){showTab("int");});
+
+$("p-date").value=today();
+restore();
+if(!$("p-date").value)$("p-date").value=today();
+update();
+window.__bgq={parseAll:parseAll,model:model,waText:waText,tsv:tsv};
+})();
+</script>
+</body></html>
